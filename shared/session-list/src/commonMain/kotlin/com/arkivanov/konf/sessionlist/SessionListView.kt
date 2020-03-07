@@ -12,11 +12,15 @@ interface SessionListView : MviView<Model, Nothing> {
         data class Session(
             val id: String,
             val title: String?,
-            val speaker: Speaker
-        )
-
-        data class Speaker(
-            val name: String?
-        )
+            val description: String?,
+            val level: Level?,
+            val speakerName: String?,
+            val speakerAvatarUrl: String?,
+            val speakerCompanyName: String?
+        ) {
+            enum class Level {
+                BEGINNER, INTERMEDIATE, ADVANCED, EXPERT
+            }
+        }
     }
 }

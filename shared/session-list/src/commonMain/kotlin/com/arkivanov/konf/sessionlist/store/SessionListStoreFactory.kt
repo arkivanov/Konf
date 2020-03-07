@@ -1,7 +1,7 @@
 package com.arkivanov.konf.sessionlist.store
 
 import com.arkivanov.konf.database.KonfDatabaseQueries
-import com.arkivanov.konf.database.SessionAndSpeaker
+import com.arkivanov.konf.database.SessionBundle
 import com.arkivanov.konf.database.listenList
 import com.arkivanov.konf.sessionlist.store.SessionListStore.State
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -29,13 +29,13 @@ internal class SessionListStoreFactory(
         }
 
     private sealed class Result {
-        data class Data(val sessions: List<SessionAndSpeaker>) : Result()
+        data class Data(val sessions: List<SessionBundle>) : Result()
     }
 
     private inner class ExecutorImpl : ReaktiveExecutor<Nothing, Unit, State, Result, Nothing>() {
         override fun executeAction(action: Unit, getState: () -> State) {
             databaseQueries
-                .sessionAndSpeaker()
+                .sessionBundle()
                 .listenList()
                 .map(Result::Data)
                 .observeOn(mainScheduler)

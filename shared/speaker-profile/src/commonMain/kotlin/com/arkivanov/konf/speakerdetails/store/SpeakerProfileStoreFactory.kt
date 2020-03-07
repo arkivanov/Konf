@@ -1,7 +1,7 @@
 package com.arkivanov.konf.speakerdetails.store
 
 import com.arkivanov.konf.database.KonfDatabaseQueries
-import com.arkivanov.konf.database.SpeakerEntity
+import com.arkivanov.konf.database.SpeakerBundle
 import com.arkivanov.konf.database.listenOne
 import com.arkivanov.konf.speakerdetails.store.SpeakerProfileStore.State
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -30,13 +30,13 @@ internal class SpeakerProfileStoreFactory(
         }
 
     private sealed class Result {
-        data class Data(val speaker: SpeakerEntity?) : Result()
+        data class Data(val speaker: SpeakerBundle?) : Result()
     }
 
     private inner class ExecutorImpl : ReaktiveExecutor<Nothing, Unit, State, Result, Nothing>() {
         override fun executeAction(action: Unit, getState: () -> State) {
             databaseQueries
-                .speakerById(id = speakerId)
+                .speakerBundleById(id = speakerId)
                 .listenOne()
                 .map(Result::Data)
                 .observeOn(mainScheduler)
