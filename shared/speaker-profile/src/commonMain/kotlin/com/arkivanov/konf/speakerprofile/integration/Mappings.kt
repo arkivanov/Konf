@@ -6,6 +6,6 @@ import com.arkivanov.konf.speakerprofile.store.SpeakerProfileStore
 internal fun SpeakerProfileStore.State.toViewModel(): SpeakerProfileView.Model =
     SpeakerProfileView.Model(
         isLoading = isLoading,
-        isError = !isLoading && (speakerEntity == null),
-        name = speakerEntity?.name
+        isError = !isLoading && (speaker == null),
+        name = speaker?.name
     )

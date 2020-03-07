@@ -9,6 +9,6 @@ internal interface SpeakerProfileStore : Store<Nothing, State, Nothing>, Disposa
 
     data class State(
         val isLoading: Boolean = false,
-        val speakerEntity: SpeakerEntity? = null
+        val speaker: SpeakerEntity? = null
     )
 }

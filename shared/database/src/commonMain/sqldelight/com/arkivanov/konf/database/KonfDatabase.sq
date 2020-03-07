@@ -3,7 +3,21 @@ CREATE TABLE SpeakerEntity (
     name TEXT
 );
 
-getSpeakerById:
-SELECT *
-FROM SpeakerEntity
-WHERE (id = :id);
+speakerById:
+SELECT * FROM SpeakerEntity WHERE (id = :id);
+
+CREATE TABLE SessionEntity (
+    id TEXT PRIMARY KEY,
+    speakerId TEXT NOT NULL,
+    title TEXT
+);
+
+session:
+SELECT * FROM SessionEntity;
+
+sessionAndSpeaker:
+SELECT Session.id AS sessionId,
+    Session.title AS sessionTitle,
+    Speaker.name AS speakerName
+FROM SessionEntity AS Session
+INNER JOIN SpeakerEntity AS Speaker ON (Speaker.id = Session.id);
