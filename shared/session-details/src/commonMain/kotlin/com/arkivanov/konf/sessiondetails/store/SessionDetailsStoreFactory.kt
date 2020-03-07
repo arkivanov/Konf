@@ -1,9 +1,9 @@
-package com.arkivanov.konf.speakerprofile.store
+package com.arkivanov.konf.sessiondetails.store
 
 import com.arkivanov.konf.database.KonfDatabaseQueries
-import com.arkivanov.konf.database.SpeakerEntity
+import com.arkivanov.konf.database.SessionEntity
 import com.arkivanov.konf.database.listenOne
-import com.arkivanov.konf.speakerprofile.store.SpeakerProfileStore.State
+import com.arkivanov.konf.sessiondetails.store.SessionDetailsStore.State
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
@@ -13,14 +13,14 @@ import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.observeOn
 import com.badoo.reaktive.scheduler.mainScheduler
 
-internal class SpeakerProfileStoreFactory(
-    private val speakerId: String,
+internal class SessionDetailsStoreFactory(
+    private val sessionId: String,
     private val factory: StoreFactory,
     private val databaseQueries: KonfDatabaseQueries
 ) {
 
-    fun create(): SpeakerProfileStore =
-        object : SpeakerProfileStore, Store<Nothing, State, Nothing> by factory.create(
+    fun create(): SessionDetailsStore =
+        object : SessionDetailsStore, Store<Nothing, State, Nothing> by factory.create(
             name = "SpeakerProfileStore",
             initialState = State(isLoading = true),
             bootstrapper = SimpleBootstrapper(Unit),
@@ -30,13 +30,13 @@ internal class SpeakerProfileStoreFactory(
         }
 
     private sealed class Result {
-        data class Data(val speakerEntity: SpeakerEntity?) : Result()
+        data class Data(val session: SessionEntity?) : Result()
     }
 
     private inner class ExecutorImpl : ReaktiveExecutor<Nothing, Unit, State, Result, Nothing>() {
         override fun executeAction(action: Unit, getState: () -> State) {
             databaseQueries
-                .speakerById(id = speakerId)
+                .sessionById(id = sessionId)
                 .listenOne()
                 .map(Result::Data)
                 .observeOn(mainScheduler)
@@ -47,7 +47,7 @@ internal class SpeakerProfileStoreFactory(
     private object ReducerImpl : Reducer<State, Result> {
         override fun State.reduce(result: Result): State =
             when (result) {
-                is Result.Data -> copy(isLoading = false, speaker = result.speakerEntity)
+                is Result.Data -> copy(isLoading = false, session = result.session)
             }
     }
 }

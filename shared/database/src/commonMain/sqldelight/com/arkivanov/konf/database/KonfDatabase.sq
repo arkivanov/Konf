@@ -15,6 +15,9 @@ CREATE TABLE SessionEntity (
 session:
 SELECT * FROM SessionEntity;
 
+sessionById:
+SELECT * FROM SessionEntity WHERE (id = :id);
+
 sessionAndSpeaker:
 SELECT Session.id AS sessionId,
     Session.title AS sessionTitle,

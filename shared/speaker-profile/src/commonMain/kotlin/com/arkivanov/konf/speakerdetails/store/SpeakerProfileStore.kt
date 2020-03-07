@@ -1,7 +1,7 @@
-package com.arkivanov.konf.speakerprofile.store
+package com.arkivanov.konf.speakerdetails.store
 
 import com.arkivanov.konf.database.SpeakerEntity
-import com.arkivanov.konf.speakerprofile.store.SpeakerProfileStore.State
+import com.arkivanov.konf.speakerdetails.store.SpeakerProfileStore.State
 import com.arkivanov.mvikotlin.core.store.Store
 import com.badoo.reaktive.disposable.Disposable
 

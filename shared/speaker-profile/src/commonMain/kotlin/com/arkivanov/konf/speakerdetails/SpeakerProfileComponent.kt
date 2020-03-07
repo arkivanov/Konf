@@ -1,4 +1,4 @@
-package com.arkivanov.konf.speakerprofile
+package com.arkivanov.konf.speakerdetails
 
 import com.arkivanov.konf.database.KonfDatabaseQueries
 import com.arkivanov.mvikotlin.core.store.StoreFactory

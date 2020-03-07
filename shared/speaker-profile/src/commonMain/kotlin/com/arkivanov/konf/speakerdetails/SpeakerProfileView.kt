@@ -1,6 +1,6 @@
-package com.arkivanov.konf.speakerprofile
+package com.arkivanov.konf.speakerdetails
 
-import com.arkivanov.konf.speakerprofile.SpeakerProfileView.Model
+import com.arkivanov.konf.speakerdetails.SpeakerProfileView.Model
 import com.arkivanov.mvikotlin.core.view.MviView
 
 interface SpeakerProfileView : MviView<Model, Nothing> {

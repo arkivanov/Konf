@@ -21,6 +21,10 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared:session-list"))
+    implementation(project(":shared:session-details"))
+    implementation(project(":shared:speaker-profile"))
+
     implementation(Deps.Jetbrains.Kotlin.StdLib.Jdk7)
     implementation(Deps.AndroidX.AppCompat.AppCompat)
     implementation(Deps.AndroidX.RecyclerView.RecyclerView)

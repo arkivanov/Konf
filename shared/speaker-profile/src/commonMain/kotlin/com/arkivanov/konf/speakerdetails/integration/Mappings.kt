@@ -1,7 +1,7 @@
-package com.arkivanov.konf.speakerprofile.integration
+package com.arkivanov.konf.speakerdetails.integration
 
-import com.arkivanov.konf.speakerprofile.SpeakerProfileView
-import com.arkivanov.konf.speakerprofile.store.SpeakerProfileStore
+import com.arkivanov.konf.speakerdetails.SpeakerProfileView
+import com.arkivanov.konf.speakerdetails.store.SpeakerProfileStore
 
 internal fun SpeakerProfileStore.State.toViewModel(): SpeakerProfileView.Model =
     SpeakerProfileView.Model(
