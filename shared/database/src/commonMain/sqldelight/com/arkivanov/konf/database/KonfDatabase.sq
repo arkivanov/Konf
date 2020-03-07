@@ -1,0 +1,9 @@
+CREATE TABLE SpeakerEntity (
+    id TEXT PRIMARY KEY,
+    name TEXT
+);
+
+getSpeakerById:
+SELECT *
+FROM SpeakerEntity
+WHERE (id = :id);
