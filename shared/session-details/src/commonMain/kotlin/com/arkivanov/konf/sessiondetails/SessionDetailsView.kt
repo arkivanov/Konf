@@ -1,9 +1,10 @@
 package com.arkivanov.konf.sessiondetails
 
+import com.arkivanov.konf.sessiondetails.SessionDetailsView.Event
 import com.arkivanov.konf.sessiondetails.SessionDetailsView.Model
 import com.arkivanov.mvikotlin.core.view.MviView
 
-interface SessionDetailsView : MviView<Model, Nothing> {
+interface SessionDetailsView : MviView<Model, Event> {
 
     data class Model(
         val isLoading: Boolean,
@@ -18,5 +19,10 @@ interface SessionDetailsView : MviView<Model, Nothing> {
         enum class Level {
             BEGINNER, INTERMEDIATE, ADVANCED, EXPERT
         }
+    }
+
+    sealed class Event {
+        object CloseClicked : Event()
+        object SpeakerClicked : Event()
     }
 }

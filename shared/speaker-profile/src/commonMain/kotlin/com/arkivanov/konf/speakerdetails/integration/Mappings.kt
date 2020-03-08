@@ -1,5 +1,6 @@
 package com.arkivanov.konf.speakerdetails.integration
 
+import com.arkivanov.konf.speakerdetails.SpeakerProfileComponent.Output
 import com.arkivanov.konf.speakerdetails.SpeakerProfileView
 import com.arkivanov.konf.speakerdetails.store.SpeakerProfileStore
 
@@ -19,3 +20,8 @@ internal fun SpeakerProfileStore.State.toViewModel(): SpeakerProfileView.Model =
         companyName = speaker?.companyName,
         companyLogoUrl = speaker?.companyLogoUrl
     )
+
+internal fun SpeakerProfileView.Event.toOutput(): Output? =
+    when (this) {
+        is SpeakerProfileView.Event.CloseClicked -> Output.Finished
+    }

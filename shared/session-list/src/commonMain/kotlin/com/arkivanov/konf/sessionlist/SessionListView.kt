@@ -1,13 +1,14 @@
 package com.arkivanov.konf.sessionlist
 
+import com.arkivanov.konf.sessionlist.SessionListView.Event
 import com.arkivanov.konf.sessionlist.SessionListView.Model
 import com.arkivanov.mvikotlin.core.view.MviView
 
-interface SessionListView : MviView<Model, Nothing> {
+interface SessionListView : MviView<Model, Event> {
 
     data class Model(
-        val isLoading: Boolean = false,
-        val sessions: List<Session> = emptyList()
+        val isLoading: Boolean,
+        val sessions: List<Session>
     ) {
         data class Session(
             val id: String,
@@ -22,5 +23,10 @@ interface SessionListView : MviView<Model, Nothing> {
                 BEGINNER, INTERMEDIATE, ADVANCED, EXPERT
             }
         }
+    }
+
+    sealed class Event {
+        object CloseClicked : Event()
+        data class SessionClicked(val index: Int) : Event()
     }
 }

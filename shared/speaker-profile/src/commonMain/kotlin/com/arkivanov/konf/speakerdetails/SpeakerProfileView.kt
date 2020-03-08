@@ -1,9 +1,10 @@
 package com.arkivanov.konf.speakerdetails
 
+import com.arkivanov.konf.speakerdetails.SpeakerProfileView.Event
 import com.arkivanov.konf.speakerdetails.SpeakerProfileView.Model
 import com.arkivanov.mvikotlin.core.view.MviView
 
-interface SpeakerProfileView : MviView<Model, Nothing> {
+interface SpeakerProfileView : MviView<Model, Event> {
 
     data class Model(
         val isLoading: Boolean,
@@ -20,4 +21,8 @@ interface SpeakerProfileView : MviView<Model, Nothing> {
         val companyName: String?,
         val companyLogoUrl: String?
     )
+
+    sealed class Event {
+        object CloseClicked : Event()
+    }
 }

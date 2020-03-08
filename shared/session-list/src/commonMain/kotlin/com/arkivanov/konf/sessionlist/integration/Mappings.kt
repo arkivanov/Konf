@@ -2,6 +2,7 @@ package com.arkivanov.konf.sessionlist.integration
 
 import com.arkivanov.konf.database.SessionBundle
 import com.arkivanov.konf.database.SessionLevel
+import com.arkivanov.konf.sessionlist.SessionListComponent.Output
 import com.arkivanov.konf.sessionlist.SessionListView
 import com.arkivanov.konf.sessionlist.store.SessionListStore
 
@@ -27,3 +28,20 @@ private fun SessionBundle.toSessionModel(): SessionListView.Model.Session =
         speakerAvatarUrl = speakerAvatarUrl,
         speakerCompanyName = speakerCompanyName
     )
+
+internal fun SessionListStore.Label.toOutput(): Output? =
+    when (this) {
+        is SessionListStore.Label.SessionSelected -> Output.SessionSelected(id = id)
+    }
+
+internal fun SessionListView.Event.toIntent(): SessionListStore.Intent? =
+    when (this) {
+        is SessionListView.Event.CloseClicked -> null
+        is SessionListView.Event.SessionClicked -> SessionListStore.Intent.SelectSession(index = index)
+    }
+
+internal fun SessionListView.Event.toOutput(): Output? =
+    when (this) {
+        is SessionListView.Event.CloseClicked -> Output.Finished
+        is SessionListView.Event.SessionClicked -> null
+    }

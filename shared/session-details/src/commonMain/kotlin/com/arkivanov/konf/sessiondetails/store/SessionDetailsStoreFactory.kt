@@ -3,6 +3,8 @@ package com.arkivanov.konf.sessiondetails.store
 import com.arkivanov.konf.database.KonfDatabaseQueries
 import com.arkivanov.konf.database.SessionBundle
 import com.arkivanov.konf.database.listenOne
+import com.arkivanov.konf.sessiondetails.store.SessionDetailsStore.Intent
+import com.arkivanov.konf.sessiondetails.store.SessionDetailsStore.Label
 import com.arkivanov.konf.sessiondetails.store.SessionDetailsStore.State
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
@@ -20,7 +22,7 @@ internal class SessionDetailsStoreFactory(
 ) {
 
     fun create(): SessionDetailsStore =
-        object : SessionDetailsStore, Store<Nothing, State, Nothing> by factory.create(
+        object : SessionDetailsStore, Store<Intent, State, Label> by factory.create(
             name = "SpeakerProfileStore",
             initialState = State(isLoading = true),
             bootstrapper = SimpleBootstrapper(Unit),
@@ -33,7 +35,19 @@ internal class SessionDetailsStoreFactory(
         data class Data(val session: SessionBundle?) : Result()
     }
 
-    private inner class ExecutorImpl : ReaktiveExecutor<Nothing, Unit, State, Result, Nothing>() {
+    private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
+        override fun executeIntent(intent: Intent, getState: () -> State) {
+            when (intent) {
+                is Intent.SelectSpaker -> selectSpeaker(getState())
+            }.let {}
+        }
+
+        private fun selectSpeaker(state: State) {
+            state.session?.speakerId?.also {
+                publish(Label.SpeakerSelected(id = it))
+            }
+        }
+
         override fun executeAction(action: Unit, getState: () -> State) {
             databaseQueries
                 .sessionBundleById(id = sessionId)

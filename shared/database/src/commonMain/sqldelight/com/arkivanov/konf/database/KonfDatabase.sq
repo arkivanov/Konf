@@ -83,6 +83,7 @@ Session.id AS sessionId,
 Session.title AS sessionTitle,
 Session.description AS sessionDescription,
 Session.level AS sessionLevel,
+Speaker.id AS speakerId,
 Speaker.name AS speakerName,
 Speaker.avatarUrl AS speakerAvatarUrl,
 Company.name AS speakerCompanyName
