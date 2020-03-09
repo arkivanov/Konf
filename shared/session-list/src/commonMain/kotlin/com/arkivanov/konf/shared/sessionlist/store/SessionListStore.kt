@@ -1,9 +1,9 @@
-package com.arkivanov.konf.sessionlist.store
+package com.arkivanov.konf.shared.sessionlist.store
 
 import com.arkivanov.konf.database.SessionBundle
-import com.arkivanov.konf.sessionlist.store.SessionListStore.Intent
-import com.arkivanov.konf.sessionlist.store.SessionListStore.Label
-import com.arkivanov.konf.sessionlist.store.SessionListStore.State
+import com.arkivanov.konf.shared.sessionlist.store.SessionListStore.Intent
+import com.arkivanov.konf.shared.sessionlist.store.SessionListStore.Label
+import com.arkivanov.konf.shared.sessionlist.store.SessionListStore.State
 import com.arkivanov.mvikotlin.core.store.Store
 import com.badoo.reaktive.disposable.Disposable
 

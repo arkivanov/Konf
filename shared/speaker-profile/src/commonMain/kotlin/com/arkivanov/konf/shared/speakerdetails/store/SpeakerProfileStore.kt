@@ -1,7 +1,7 @@
-package com.arkivanov.konf.speakerdetails.store
+package com.arkivanov.konf.shared.speakerdetails.store
 
 import com.arkivanov.konf.database.SpeakerBundle
-import com.arkivanov.konf.speakerdetails.store.SpeakerProfileStore.State
+import com.arkivanov.konf.shared.speakerdetails.store.SpeakerProfileStore.State
 import com.arkivanov.mvikotlin.core.store.Store
 import com.badoo.reaktive.disposable.Disposable
 

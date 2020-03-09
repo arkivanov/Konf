@@ -1,9 +1,9 @@
-package com.arkivanov.konf.sessiondetails.integration
+package com.arkivanov.konf.shared.sessiondetails.integration
 
 import com.arkivanov.konf.database.SessionLevel
-import com.arkivanov.konf.sessiondetails.SessionDetailsComponent.Output
-import com.arkivanov.konf.sessiondetails.SessionDetailsView
-import com.arkivanov.konf.sessiondetails.store.SessionDetailsStore
+import com.arkivanov.konf.shared.sessiondetails.SessionDetailsComponent.Output
+import com.arkivanov.konf.shared.sessiondetails.SessionDetailsView
+import com.arkivanov.konf.shared.sessiondetails.store.SessionDetailsStore
 
 internal fun SessionDetailsStore.State.toViewModel(): SessionDetailsView.Model =
     SessionDetailsView.Model(

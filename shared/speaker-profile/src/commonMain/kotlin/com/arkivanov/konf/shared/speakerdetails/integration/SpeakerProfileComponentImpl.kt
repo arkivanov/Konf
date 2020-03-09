@@ -1,15 +1,14 @@
-package com.arkivanov.konf.sessiondetails.integration
+package com.arkivanov.konf.shared.speakerdetails.integration
 
-import com.arkivanov.konf.sessiondetails.SessionDetailsComponent
-import com.arkivanov.konf.sessiondetails.SessionDetailsComponent.Dependencies
-import com.arkivanov.konf.sessiondetails.SessionDetailsComponent.Output
-import com.arkivanov.konf.sessiondetails.SessionDetailsView
-import com.arkivanov.konf.sessiondetails.store.SessionDetailsStore
-import com.arkivanov.konf.sessiondetails.store.SessionDetailsStoreFactory
+import com.arkivanov.konf.shared.speakerdetails.SpeakerProfileComponent
+import com.arkivanov.konf.shared.speakerdetails.SpeakerProfileComponent.Dependencies
+import com.arkivanov.konf.shared.speakerdetails.SpeakerProfileComponent.Output
+import com.arkivanov.konf.shared.speakerdetails.SpeakerProfileView
+import com.arkivanov.konf.shared.speakerdetails.store.SpeakerProfileStore
+import com.arkivanov.konf.shared.speakerdetails.store.SpeakerProfileStoreFactory
 import com.arkivanov.mvikotlin.core.binder.Binder
 import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.events
-import com.arkivanov.mvikotlin.extensions.reaktive.labels
 import com.arkivanov.mvikotlin.extensions.reaktive.states
 import com.badoo.reaktive.annotations.ExperimentalReaktiveApi
 import com.badoo.reaktive.disposable.scope.DisposableScope
@@ -19,35 +18,30 @@ import com.badoo.reaktive.observable.mapNotNull
 import com.badoo.reaktive.subject.publish.PublishSubject
 
 @UseExperimental(ExperimentalReaktiveApi::class)
-internal class SessionDetailsComponentImpl(
+internal class SpeakerProfileComponentImpl(
     dependencies: Dependencies
-) : SessionDetailsComponent, DisposableScope by DisposableScope() {
+) : SpeakerProfileComponent, DisposableScope by DisposableScope() {
 
     private val output = PublishSubject<Output>()
 
     private val store =
-        SessionDetailsStoreFactory(
-            sessionId = dependencies.sessionId,
+        SpeakerProfileStoreFactory(
+            speakerId = dependencies.speakerId,
             factory = dependencies.storeFactory,
             databaseQueries = dependencies.databaseQueries
         ).create().scope()
 
     private var binder: Binder? = null
 
-    init {
-        store.labels.mapNotNull(SessionDetailsStore.Label::toOutput).subscribeScoped(onNext = output::onNext)
-    }
-
     override fun subscribe(observer: ObservableObserver<Output>) {
         output.subscribe(observer)
     }
 
-    override fun onViewCreated(view: SessionDetailsView) {
+    override fun onViewCreated(view: SpeakerProfileView) {
         binder =
             bind {
-                store.states.map(SessionDetailsStore.State::toViewModel) bindTo view
-                view.events.mapNotNull(SessionDetailsView.Event::toIntent) bindTo store
-                view.events.mapNotNull(SessionDetailsView.Event::toOutput) bindTo output
+                store.states.map(SpeakerProfileStore.State::toViewModel) bindTo view
+                view.events.mapNotNull(SpeakerProfileView.Event::toOutput) bindTo output
             }
     }
 

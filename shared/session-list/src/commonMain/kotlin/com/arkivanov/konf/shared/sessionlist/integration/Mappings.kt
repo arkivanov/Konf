@@ -1,10 +1,10 @@
-package com.arkivanov.konf.sessionlist.integration
+package com.arkivanov.konf.shared.sessionlist.integration
 
 import com.arkivanov.konf.database.SessionBundle
 import com.arkivanov.konf.database.SessionLevel
-import com.arkivanov.konf.sessionlist.SessionListComponent.Output
-import com.arkivanov.konf.sessionlist.SessionListView
-import com.arkivanov.konf.sessionlist.store.SessionListStore
+import com.arkivanov.konf.shared.sessionlist.SessionListComponent.Output
+import com.arkivanov.konf.shared.sessionlist.SessionListView
+import com.arkivanov.konf.shared.sessionlist.store.SessionListStore
 
 internal fun SessionListStore.State.toViewModel(): SessionListView.Model =
     SessionListView.Model(

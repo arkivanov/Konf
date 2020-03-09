@@ -1,7 +1,7 @@
-package com.arkivanov.konf.sessiondetails
+package com.arkivanov.konf.shared.sessiondetails
 
-import com.arkivanov.konf.sessiondetails.SessionDetailsView.Event
-import com.arkivanov.konf.sessiondetails.SessionDetailsView.Model
+import com.arkivanov.konf.shared.sessiondetails.SessionDetailsView.Event
+import com.arkivanov.konf.shared.sessiondetails.SessionDetailsView.Model
 import com.arkivanov.mvikotlin.core.view.MviView
 
 interface SessionDetailsView : MviView<Model, Event> {

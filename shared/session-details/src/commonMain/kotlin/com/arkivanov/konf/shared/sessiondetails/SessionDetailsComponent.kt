@@ -1,13 +1,13 @@
-package com.arkivanov.konf.sessionlist
+package com.arkivanov.konf.shared.sessiondetails
 
 import com.arkivanov.konf.database.KonfDatabaseQueries
-import com.arkivanov.konf.sessionlist.SessionListComponent.Output
+import com.arkivanov.konf.shared.sessiondetails.SessionDetailsComponent.Output
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
 
-interface SessionListComponent : Observable<Output> {
+interface SessionDetailsComponent : Observable<Output> {
 
-    fun onViewCreated(view: SessionListView)
+    fun onViewCreated(view: SessionDetailsView)
 
     fun onStart()
 
@@ -18,12 +18,13 @@ interface SessionListComponent : Observable<Output> {
     fun onDestroy()
 
     interface Dependencies {
+        val sessionId: String
         val storeFactory: StoreFactory
         val databaseQueries: KonfDatabaseQueries
     }
 
     sealed class Output {
         object Finished : Output()
-        data class SessionSelected(val id: String) : Output()
+        data class SpeakerSelected(val id: String): Output()
     }
 }
