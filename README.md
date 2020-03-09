@@ -1,4 +1,4 @@
 # Konf
-Kotlin Multiplatform conference app
+Kotlin Multiplatform conference app template
 
 Work in progress
