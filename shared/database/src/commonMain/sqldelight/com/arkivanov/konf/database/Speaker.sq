@@ -17,3 +17,9 @@ CREATE TABLE SpeakerEntity (
 
 getById:
 SELECT * FROM SpeakerEntity WHERE (id = :id);
+
+clear:
+DELETE FROM SpeakerEntity;
+
+put:
+INSERT INTO SpeakerEntity VALUES ?;

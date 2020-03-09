@@ -8,3 +8,9 @@ CREATE TABLE CompanyEntity (
 
 getById:
 SELECT * FROM CompanyEntity WHERE (id = :id);
+
+clear:
+DELETE FROM CompanyEntity;
+
+put:
+INSERT INTO CompanyEntity VALUES ?;

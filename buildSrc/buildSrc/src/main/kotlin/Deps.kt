@@ -4,7 +4,10 @@ object Deps {
         object Kotlin : Group(name = "org.jetbrains.kotlin") {
             private const val version = "1.3.61"
 
-            object Plugin : Dependency(group = Kotlin, name = "kotlin-gradle-plugin", version = version)
+            object Plugin {
+                object Gradle : Dependency(group = Kotlin, name = "kotlin-gradle-plugin", version = version)
+                object Serialization : Dependency(group = Kotlin, name = "kotlin-serialization", version = version)
+            }
 
             object StdLib {
                 object Common : Dependency(group = Kotlin, name = "kotlin-stdlib-common", version = version)
@@ -18,6 +21,16 @@ object Deps {
 
             object TestAnnotations {
                 object Common : Dependency(group = Kotlin, name = "kotlin-test-annotations-common", version = version)
+            }
+        }
+
+        object Kotlinx : Group(name = "org.jetbrains.kotlinx") {
+            object Serialization {
+                private const val version = "0.20.0"
+
+                object RuntimeCommon : Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime-common", version = version)
+                object Runtime : Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime", version = version)
+                object RuntimeNative : Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime-native", version = version)
             }
         }
     }

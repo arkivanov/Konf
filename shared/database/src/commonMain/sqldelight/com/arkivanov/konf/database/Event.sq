@@ -12,3 +12,9 @@ CREATE TABLE EventEntity (
 
 get:
 SELECT * FROM EventEntity;
+
+clear:
+DELETE FROM EventEntity;
+
+put:
+INSERT INTO EventEntity VALUES ?;
