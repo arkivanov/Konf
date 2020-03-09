@@ -1,0 +1,10 @@
+
+CREATE TABLE CompanyEntity (
+    id TEXT PRIMARY KEY,
+    name TEXT,
+    logoUrl TEXT,
+    websiteUrl TEXT
+);
+
+getById:
+SELECT * FROM CompanyEntity WHERE (id = :id);

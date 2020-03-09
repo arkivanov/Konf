@@ -29,7 +29,7 @@ internal class SessionDetailsComponentImpl(
         SessionDetailsStoreFactory(
             sessionId = dependencies.sessionId,
             factory = dependencies.storeFactory,
-            databaseQueries = dependencies.databaseQueries
+            sessionBundleQueries = dependencies.database.sessionBundleQueries
         ).create().scope()
 
     private var binder: Binder? = null

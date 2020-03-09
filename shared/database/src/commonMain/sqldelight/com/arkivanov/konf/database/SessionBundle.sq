@@ -1,0 +1,20 @@
+
+CREATE VIEW SessionBundle AS
+SELECT
+Session.id AS sessionId,
+Session.title AS sessionTitle,
+Session.description AS sessionDescription,
+Session.level AS sessionLevel,
+Speaker.id AS speakerId,
+Speaker.name AS speakerName,
+Speaker.avatarUrl AS speakerAvatarUrl,
+Company.name AS speakerCompanyName
+FROM SessionEntity AS Session
+INNER JOIN SpeakerEntity AS Speaker ON (Speaker.id = Session.speakerId)
+LEFT JOIN CompanyEntity AS Company ON (Company.id = Speaker.companyId);
+
+getAll:
+SELECT * FROM SessionBundle;
+
+getById:
+SELECT * FROM SessionBundle WHERE (sessionId = :id);

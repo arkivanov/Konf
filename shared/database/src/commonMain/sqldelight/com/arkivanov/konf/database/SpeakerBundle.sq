@@ -1,0 +1,22 @@
+
+CREATE VIEW SpeakerBundle AS
+SELECT
+Speaker.id AS speakerId,
+Speaker.name AS speakerName,
+Speaker.avatarUrl AS speakerAvatarUrl,
+Speaker.imageUrl AS speakerImageUrl,
+Speaker.job AS speakerJob,
+Speaker.location AS speakerLocation,
+Speaker.biography AS speakerBiography,
+Speaker.twitterAccount AS speakerTwitterAccount,
+Speaker.githubAccount AS speakerGithubAccount,
+Speaker.facebookAccount AS speakerFacebookAccount,
+Speaker.linkedInAccount AS speakerLinkedInAccount,
+Speaker.mediumAccount AS speakerMediumAccount,
+Company.name AS companyName,
+Company.logoUrl AS companyLogoUrl
+FROM SpeakerEntity AS Speaker
+LEFT JOIN CompanyEntity AS Company ON (Company.id = Speaker.companyId);
+
+getById:
+SELECT * FROM SpeakerBundle WHERE (speakerId = :id);

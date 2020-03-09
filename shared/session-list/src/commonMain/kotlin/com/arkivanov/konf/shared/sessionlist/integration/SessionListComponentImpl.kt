@@ -28,7 +28,7 @@ internal class SessionListComponentImpl(
     private val store =
         SessionListStoreFactory(
             factory = dependencies.storeFactory,
-            databaseQueries = dependencies.databaseQueries
+            sessionBundleQueries = dependencies.database.sessionBundleQueries
         ).create().scope()
 
     private var binder: Binder? = null

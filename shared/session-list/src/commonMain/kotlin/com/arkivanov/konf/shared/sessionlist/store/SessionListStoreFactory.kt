@@ -1,7 +1,7 @@
 package com.arkivanov.konf.shared.sessionlist.store
 
-import com.arkivanov.konf.database.KonfDatabaseQueries
 import com.arkivanov.konf.database.SessionBundle
+import com.arkivanov.konf.database.SessionBundleQueries
 import com.arkivanov.konf.database.listenList
 import com.arkivanov.konf.shared.sessionlist.store.SessionListStore.Intent
 import com.arkivanov.konf.shared.sessionlist.store.SessionListStore.Label
@@ -17,7 +17,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 
 internal class SessionListStoreFactory(
     private val factory: StoreFactory,
-    private val databaseQueries: KonfDatabaseQueries
+    private val sessionBundleQueries: SessionBundleQueries
 ) {
 
     fun create(): SessionListStore =
@@ -46,8 +46,8 @@ internal class SessionListStoreFactory(
         }
 
         override fun executeAction(action: Unit, getState: () -> State) {
-            databaseQueries
-                .sessionBundle()
+            sessionBundleQueries
+                .getAll()
                 .listenList()
                 .map(Result::Data)
                 .observeOn(mainScheduler)

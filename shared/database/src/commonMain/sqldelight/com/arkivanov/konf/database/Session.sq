@@ -1,0 +1,15 @@
+import com.arkivanov.konf.database.SessionLevel;
+
+CREATE TABLE SessionEntity (
+    id TEXT PRIMARY KEY,
+    speakerId TEXT,
+    title TEXT,
+    description TEXT,
+    level TEXT AS SessionLevel
+);
+
+getAll:
+SELECT * FROM SessionEntity;
+
+getById:
+SELECT * FROM SessionEntity WHERE (id = :id);

@@ -1,0 +1,14 @@
+
+CREATE TABLE EventEntity (
+    title TEXT,
+    description TEXT,
+    startDate INTEGER,
+    endDate INTEGER,
+    locationLatitude REAL,
+    locationLongitude REAL,
+    locationDescription TEXT,
+    websiteUrl TEXT
+);
+
+get:
+SELECT * FROM EventEntity;

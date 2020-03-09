@@ -1,7 +1,7 @@
 package com.arkivanov.konf.shared.speakerdetails.store
 
-import com.arkivanov.konf.database.KonfDatabaseQueries
 import com.arkivanov.konf.database.SpeakerBundle
+import com.arkivanov.konf.database.SpeakerBundleQueries
 import com.arkivanov.konf.database.listenOne
 import com.arkivanov.konf.shared.speakerdetails.store.SpeakerProfileStore.State
 import com.arkivanov.mvikotlin.core.store.Reducer
@@ -16,7 +16,7 @@ import com.badoo.reaktive.scheduler.mainScheduler
 internal class SpeakerProfileStoreFactory(
     private val speakerId: String,
     private val factory: StoreFactory,
-    private val databaseQueries: KonfDatabaseQueries
+    private val speakerBundleQueries: SpeakerBundleQueries
 ) {
 
     fun create(): SpeakerProfileStore =
@@ -35,8 +35,8 @@ internal class SpeakerProfileStoreFactory(
 
     private inner class ExecutorImpl : ReaktiveExecutor<Nothing, Unit, State, Result, Nothing>() {
         override fun executeAction(action: Unit, getState: () -> State) {
-            databaseQueries
-                .speakerBundleById(id = speakerId)
+            speakerBundleQueries
+                .getById(id = speakerId)
                 .listenOne()
                 .map(Result::Data)
                 .observeOn(mainScheduler)

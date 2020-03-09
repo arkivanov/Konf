@@ -28,7 +28,7 @@ internal class SpeakerProfileComponentImpl(
         SpeakerProfileStoreFactory(
             speakerId = dependencies.speakerId,
             factory = dependencies.storeFactory,
-            databaseQueries = dependencies.databaseQueries
+            speakerBundleQueries = dependencies.database.speakerBundleQueries
         ).create().scope()
 
     private var binder: Binder? = null

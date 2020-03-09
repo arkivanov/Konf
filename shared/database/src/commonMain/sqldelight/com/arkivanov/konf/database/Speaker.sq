@@ -1,0 +1,19 @@
+
+CREATE TABLE SpeakerEntity (
+    id TEXT PRIMARY KEY,
+    companyId TEXT,
+    name TEXT,
+    avatarUrl TEXT,
+    imageUrl TEXT,
+    job TEXT,
+    location TEXT,
+    biography TEXT,
+    twitterAccount TEXT,
+    githubAccount TEXT,
+    facebookAccount TEXT,
+    linkedInAccount TEXT,
+    mediumAccount TEXT
+);
+
+getById:
+SELECT * FROM SpeakerEntity WHERE (id = :id);

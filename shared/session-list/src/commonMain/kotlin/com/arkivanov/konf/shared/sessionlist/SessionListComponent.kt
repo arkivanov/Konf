@@ -1,6 +1,6 @@
 package com.arkivanov.konf.shared.sessionlist
 
-import com.arkivanov.konf.database.KonfDatabaseQueries
+import com.arkivanov.konf.database.KonfDatabase
 import com.arkivanov.konf.shared.sessionlist.SessionListComponent.Output
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.badoo.reaktive.observable.Observable
@@ -19,7 +19,7 @@ interface SessionListComponent : Observable<Output> {
 
     interface Dependencies {
         val storeFactory: StoreFactory
-        val databaseQueries: KonfDatabaseQueries
+        val database: KonfDatabase
     }
 
     sealed class Output {
