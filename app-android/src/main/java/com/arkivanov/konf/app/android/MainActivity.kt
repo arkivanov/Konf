@@ -1,4 +1,4 @@
-package com.arkivanov.konf
+package com.arkivanov.konf.app.android
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
