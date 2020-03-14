@@ -63,6 +63,14 @@ object Deps {
         object DrawerLayout : Group(name = "androidx.drawerlayout") {
             object DrawerLayout : Dependency(group = AndroidX.DrawerLayout, name = "drawerlayout", version = "1.0.0")
         }
+
+        object SwipeRefreshLayout : Group(name = "androidx.swiperefreshlayout") {
+            object SwipeRefreshLayout : Dependency(group = AndroidX.SwipeRefreshLayout, name = "swiperefreshlayout", version = "1.0.0")
+        }
+
+        object CardView : Group(name = "androidx.cardview") {
+            object CardView : Dependency(group = AndroidX.CardView, name = "cardview", version = "1.0.0")
+        }
     }
 
     object Badoo {

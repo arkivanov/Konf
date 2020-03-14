@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -22,18 +24,33 @@ android {
     packagingOptions {
         exclude("META-INF/*.kotlin_module")
     }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    (this as ExtensionAware).configure<KotlinJvmOptions> {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
+    implementation(project(":shared:database"))
     implementation(project(":shared:sync"))
     implementation(project(":shared:session-list"))
     implementation(project(":shared:session-details"))
     implementation(project(":shared:speaker-profile"))
 
+    implementation(Deps.ArkIvanov.MviKotlin.MviKotlin)
+    implementation(Deps.ArkIvanov.MviKotlin.MviKotlinMain)
     implementation(Deps.Jetbrains.Kotlin.StdLib.Jdk7)
     implementation(Deps.AndroidX.AppCompat.AppCompat)
     implementation(Deps.AndroidX.RecyclerView.RecyclerView)
     implementation(Deps.AndroidX.ConstraintLayout.ConstraintLayout)
+    implementation(Deps.AndroidX.SwipeRefreshLayout.SwipeRefreshLayout)
+    implementation(Deps.AndroidX.CardView.CardView)
     implementation(Deps.AndroidX.DrawerLayout.DrawerLayout)
     implementation(Deps.AndroidX.Core.Ktx)
+    implementation(Deps.Squareup.SqlDelight.AndroidDriver)
 }

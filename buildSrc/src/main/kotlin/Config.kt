@@ -91,7 +91,7 @@ fun Project.setupAndroidSdkVersions() {
 
         defaultConfig {
             targetSdkVersion(29)
-            minSdkVersion(15)
+            minSdkVersion(21)
         }
     }
 }
