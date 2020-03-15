@@ -11,7 +11,7 @@ internal actual class SyncDataSourceImpl : SyncDataSource<JsonObject> {
 
     override fun load(): Maybe<JsonObject> =
         maybeFromFunction {
-            Thread.sleep(3000L)
+            Thread.sleep(1000L)
 
             json {} // Dummy JSON
         }

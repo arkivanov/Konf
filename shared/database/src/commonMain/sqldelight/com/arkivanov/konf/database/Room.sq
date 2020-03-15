@@ -1,0 +1,11 @@
+
+CREATE TABLE RoomEntity (
+    id TEXT PRIMARY KEY,
+    name TEXT
+);
+
+clear:
+DELETE FROM RoomEntity;
+
+put:
+INSERT INTO RoomEntity VALUES ?;

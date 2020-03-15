@@ -4,17 +4,20 @@ SELECT
 Session.id AS sessionId,
 Session.title AS sessionTitle,
 Session.description AS sessionDescription,
+Session.date AS sessionDate,
 Session.level AS sessionLevel,
 Speaker.id AS speakerId,
 Speaker.name AS speakerName,
 Speaker.avatarUrl AS speakerAvatarUrl,
-Company.name AS speakerCompanyName
+Company.name AS speakerCompanyName,
+Room.name AS roomName
 FROM SessionEntity AS Session
-INNER JOIN SpeakerEntity AS Speaker ON (Speaker.id = Session.speakerId)
-LEFT JOIN CompanyEntity AS Company ON (Company.id = Speaker.companyId);
+LEFT JOIN SpeakerEntity AS Speaker ON (Speaker.id = Session.speakerId)
+LEFT JOIN CompanyEntity AS Company ON (Company.id = Speaker.companyId)
+LEFT JOIN RoomEntity AS Room ON (Room.id = Session.roomId);
 
 getAll:
-SELECT * FROM SessionBundle;
+SELECT * FROM SessionBundle ORDER BY sessionDate, sessionId;
 
 getById:
 SELECT * FROM SessionBundle WHERE (sessionId = :id);

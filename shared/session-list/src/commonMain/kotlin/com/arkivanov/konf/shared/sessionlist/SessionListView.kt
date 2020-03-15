@@ -8,25 +8,26 @@ interface SessionListView : MviView<Model, Event> {
 
     data class Model(
         val isLoading: Boolean,
-        val sessions: List<Session>
+        val items: List<Item>
     ) {
-        data class Session(
-            val id: String,
-            val title: String?,
-            val description: String?,
-            val level: Level?,
-            val speakerName: String?,
-            val speakerAvatarUrl: String?,
-            val speakerCompanyName: String?
-        ) {
-            enum class Level {
-                BEGINNER, INTERMEDIATE, ADVANCED, EXPERT
-            }
+        sealed class Item {
+            data class DaySeparator(val number: Int) : Item()
+            object SessionSeparator : Item()
+
+            data class Session(
+                val id: String,
+                val title: String?,
+                val speakerName: String?,
+                val speakerCompanyName: String?,
+                val startDate: Long?,
+                val roomName: String?,
+                val eventTimeZone: String
+            ) : Item()
         }
     }
 
     sealed class Event {
         object CloseClicked : Event()
-        data class SessionClicked(val index: Int) : Event()
+        data class SessionClicked(val id: String) : Event()
     }
 }

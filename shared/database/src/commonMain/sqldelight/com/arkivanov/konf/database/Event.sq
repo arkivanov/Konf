@@ -4,6 +4,7 @@ CREATE TABLE EventEntity (
     description TEXT,
     startDate INTEGER,
     endDate INTEGER,
+    timeZone TEXT,
     locationLatitude REAL,
     locationLongitude REAL,
     locationDescription TEXT,

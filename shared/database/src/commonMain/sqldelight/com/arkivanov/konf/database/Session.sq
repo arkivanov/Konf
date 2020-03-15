@@ -3,8 +3,10 @@ import com.arkivanov.konf.database.SessionLevel;
 CREATE TABLE SessionEntity (
     id TEXT PRIMARY KEY,
     speakerId TEXT,
+    roomId TEXT,
     title TEXT,
     description TEXT,
+    date INTEGER,
     level TEXT AS SessionLevel
 );
 

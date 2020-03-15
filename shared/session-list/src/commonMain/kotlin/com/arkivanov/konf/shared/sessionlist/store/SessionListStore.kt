@@ -1,24 +1,26 @@
 package com.arkivanov.konf.shared.sessionlist.store
 
+import com.arkivanov.konf.database.EventEntity
 import com.arkivanov.konf.database.SessionBundle
-import com.arkivanov.konf.shared.sessionlist.store.SessionListStore.Intent
-import com.arkivanov.konf.shared.sessionlist.store.SessionListStore.Label
 import com.arkivanov.konf.shared.sessionlist.store.SessionListStore.State
 import com.arkivanov.mvikotlin.core.store.Store
 import com.badoo.reaktive.disposable.Disposable
 
-internal interface SessionListStore : Store<Intent, State, Label>, Disposable {
-
-    sealed class Intent {
-        data class SelectSession(val index: Int) : Intent()
-    }
+internal interface SessionListStore : Store<Nothing, State, Nothing>, Disposable {
 
     data class State(
         val isLoading: Boolean = false,
-        val sessions: List<SessionBundle> = emptyList()
-    )
+        val data: Data? = null
+    ) {
+        data class Data(
+            val event: EventEntity?,
+            val items: List<Item>
+        )
 
-    sealed class Label {
-        data class SessionSelected(val id: String) : Label()
+        sealed class Item {
+            data class DaySeparator(val number: Int) : Item()
+            object SessionSeparator : Item()
+            data class Session(val entity: SessionBundle) : Item()
+        }
     }
 }

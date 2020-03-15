@@ -96,6 +96,11 @@ internal class SyncStoreFactory<T>(
                     data.speakers.forEach(::put)
                 }
 
+                database.roomQueries.apply {
+                    clear()
+                    data.rooms.forEach(::put)
+                }
+
                 database.sessionQueries.apply {
                     clear()
                     data.sessions.forEach(::put)

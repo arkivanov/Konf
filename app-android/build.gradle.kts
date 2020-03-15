@@ -52,5 +52,6 @@ dependencies {
     implementation(Deps.AndroidX.CardView.CardView)
     implementation(Deps.AndroidX.DrawerLayout.DrawerLayout)
     implementation(Deps.AndroidX.Core.Ktx)
+    implementation(Deps.Google.Android.Material.Material)
     implementation(Deps.Squareup.SqlDelight.AndroidDriver)
 }

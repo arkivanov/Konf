@@ -1,47 +1,40 @@
 package com.arkivanov.konf.shared.sessionlist.integration
 
 import com.arkivanov.konf.database.SessionBundle
-import com.arkivanov.konf.database.SessionLevel
 import com.arkivanov.konf.shared.sessionlist.SessionListComponent.Output
-import com.arkivanov.konf.shared.sessionlist.SessionListView
-import com.arkivanov.konf.shared.sessionlist.store.SessionListStore
+import com.arkivanov.konf.shared.sessionlist.SessionListView.Event
+import com.arkivanov.konf.shared.sessionlist.SessionListView.Model
+import com.arkivanov.konf.shared.sessionlist.store.SessionListStore.State
 
-internal fun SessionListStore.State.toViewModel(): SessionListView.Model =
-    SessionListView.Model(
+internal fun State.toViewModel(): Model =
+    Model(
         isLoading = isLoading,
-        sessions = sessions.map { it.toSessionModel() }
+        items = data?.toItemModels() ?: emptyList()
     )
 
-private fun SessionBundle.toSessionModel(): SessionListView.Model.Session =
-    SessionListView.Model.Session(
+private fun State.Data.toItemModels(): List<Model.Item> =
+    items.map { it.toItemModel(eventTimeZone = event?.timeZone) }
+
+private fun State.Item.toItemModel(eventTimeZone: String?): Model.Item =
+    when (this) {
+        is State.Item.DaySeparator -> Model.Item.DaySeparator(number = number)
+        is State.Item.SessionSeparator -> Model.Item.SessionSeparator
+        is State.Item.Session -> entity.toSessionModel(eventTimeZone = eventTimeZone)
+    }
+
+private fun SessionBundle.toSessionModel(eventTimeZone: String?): Model.Item.Session =
+    Model.Item.Session(
         id = sessionId,
         title = sessionTitle,
-        description = sessionDescription,
-        level = when (sessionLevel) {
-            SessionLevel.BEGINNER -> SessionListView.Model.Session.Level.BEGINNER
-            SessionLevel.INTERMEDIATE -> SessionListView.Model.Session.Level.INTERMEDIATE
-            SessionLevel.ADVANCED -> SessionListView.Model.Session.Level.ADVANCED
-            SessionLevel.EXPERT -> SessionListView.Model.Session.Level.EXPERT
-            null -> null
-        },
         speakerName = speakerName,
-        speakerAvatarUrl = speakerAvatarUrl,
-        speakerCompanyName = speakerCompanyName
+        speakerCompanyName = speakerCompanyName,
+        startDate = sessionDate,
+        roomName = roomName,
+        eventTimeZone = eventTimeZone ?: "GMT"
     )
 
-internal fun SessionListStore.Label.toOutput(): Output? =
+internal fun Event.toOutput(): Output? =
     when (this) {
-        is SessionListStore.Label.SessionSelected -> Output.SessionSelected(id = id)
-    }
-
-internal fun SessionListView.Event.toIntent(): SessionListStore.Intent? =
-    when (this) {
-        is SessionListView.Event.CloseClicked -> null
-        is SessionListView.Event.SessionClicked -> SessionListStore.Intent.SelectSession(index = index)
-    }
-
-internal fun SessionListView.Event.toOutput(): Output? =
-    when (this) {
-        is SessionListView.Event.CloseClicked -> Output.Finished
-        is SessionListView.Event.SessionClicked -> null
+        is Event.CloseClicked -> Output.Finished
+        is Event.SessionClicked -> Output.SessionSelected(id = id)
     }

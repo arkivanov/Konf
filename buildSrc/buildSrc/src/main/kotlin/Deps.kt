@@ -73,6 +73,14 @@ object Deps {
         }
     }
 
+    object Google {
+        object Android {
+            object Material : Group(name = "com.google.android.material") {
+                object Material : Dependency(group = Android.Material, name = "material", version = "1.1.0")
+            }
+        }
+    }
+
     object Badoo {
         object Reaktive : Group(name = "com.badoo.reaktive") {
             private const val version = "1.1.10"
