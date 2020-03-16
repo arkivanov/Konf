@@ -1,6 +1,7 @@
 package com.arkivanov.konf.shared.sync.store
 
 import com.arkivanov.konf.database.KonfDatabase
+import com.arkivanov.konf.database.oneOrEmpty
 import com.arkivanov.konf.shared.sync.datasource.SyncDataSource
 import com.arkivanov.konf.shared.sync.store.SyncStore.Intent
 import com.arkivanov.konf.shared.sync.store.SyncStore.State
@@ -53,7 +54,12 @@ internal class SyncStoreFactory<T>(
         }
 
         override fun executeAction(action: Unit, getState: () -> State) {
-            sync()
+            database
+                .eventQueries
+                .get()
+                .oneOrEmpty()
+                .observeOn(mainScheduler)
+                .subscribeScoped(isThreadLocal = true, onComplete = ::sync)
         }
 
         private fun startSync(state: State) {
