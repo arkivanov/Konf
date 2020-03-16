@@ -12,7 +12,7 @@ class MainActivityFragmentFactory(
 
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment =
         when (className) {
-            SessionListFragment::class::java.name -> sessionListFragment()
+            SessionListFragment::class.java.name -> sessionListFragment()
             else -> super.instantiate(classLoader, className)
         }
 
