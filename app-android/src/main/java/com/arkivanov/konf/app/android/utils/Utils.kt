@@ -10,6 +10,7 @@ import android.view.View
 import androidx.annotation.IdRes
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.arkivanov.konf.app.android.App
 import java.util.Locale
 
 fun <T : Any> T?.requireNotNull(): T = requireNotNull(this)
@@ -21,6 +22,8 @@ fun <T> RecyclerView.Adapter<*>.dispatchUpdates(oldItems: List<T>, newItems: Lis
         .calculateDiff(DiffUtilCallback(oldItems = oldItems, newItems = newItems, areItemsTheSame = areItemsTheSame))
         .dispatchUpdatesTo(this)
 }
+
+val Context.app: App get() = this.applicationContext as App
 
 val Context.layoutInflater: LayoutInflater get() = LayoutInflater.from(this)
 

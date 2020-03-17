@@ -6,7 +6,7 @@ import com.arkivanov.konf.app.android.sessionlist.SessionListFragment
 import com.arkivanov.konf.database.KonfDatabase
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 
-class MainActivityFragmentFactory(
+class MainFragmentFactory(
     private val dependencies: Dependencies
 ) : FragmentFactory() {
 

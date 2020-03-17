@@ -2,22 +2,12 @@ package com.arkivanov.konf.app.android.mainactivity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.arkivanov.konf.app.android.app
-import com.arkivanov.konf.database.KonfDatabase
-import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.arkivanov.konf.app.android.utils.app
 
 class MainActivity : AppCompatActivity() {
 
-    private val fragmentFactory =
-        MainActivityFragmentFactory(
-            object : MainActivityFragmentFactory.Dependencies {
-                override val storeFactory: StoreFactory = DefaultStoreFactory
-                override val database: KonfDatabase get() = app.database
-            }
-        )
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        val fragmentFactory = MainFragmentFactory(MainFragmentFactoryDependencies(database = app.database))
         supportFragmentManager.fragmentFactory = fragmentFactory
 
         super.onCreate(savedInstanceState)
