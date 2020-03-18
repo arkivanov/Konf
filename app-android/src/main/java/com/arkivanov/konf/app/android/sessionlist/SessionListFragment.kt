@@ -8,6 +8,7 @@ import com.arkivanov.konf.database.KonfDatabase
 import com.arkivanov.konf.shared.sessionlist.SessionListComponent
 import com.arkivanov.konf.shared.sync.SyncComponent
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.core.utils.statekeeper.StateKeeperProvider
 
 class SessionListFragment(
     private val dependencies: Dependencies
@@ -67,5 +68,6 @@ class SessionListFragment(
     interface Dependencies {
         val storeFactory: StoreFactory
         val database: KonfDatabase
+        val stateKeeperProvider: StateKeeperProvider<Any>
     }
 }

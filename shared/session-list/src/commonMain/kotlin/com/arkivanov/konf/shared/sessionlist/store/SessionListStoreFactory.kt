@@ -11,6 +11,7 @@ import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.core.utils.statekeeper.StateKeeper
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
 import com.badoo.reaktive.observable.combineLatest
 import com.badoo.reaktive.observable.map
@@ -23,14 +24,17 @@ internal class SessionListStoreFactory(
     private val sessionBundleQueries: SessionBundleQueries
 ) {
 
-    fun create(): SessionListStore =
+    fun create(stateKeeper: StateKeeper<State>?): SessionListStore =
         object : SessionListStore, Store<Nothing, State, Nothing> by factory.create(
             name = "SpeakerProfileStore",
-            initialState = State(isLoading = true),
+            initialState = stateKeeper?.state ?: State(isLoading = true),
             bootstrapper = SimpleBootstrapper(Unit),
             executorFactory = ::ExecutorImpl,
             reducer = ReducerImpl
         ) {
+            init {
+                stateKeeper?.register { state }
+            }
         }
 
     private companion object {

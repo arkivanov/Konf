@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentFactory
 import com.arkivanov.konf.app.android.sessionlist.SessionListFragment
 import com.arkivanov.konf.database.KonfDatabase
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.core.utils.statekeeper.StateKeeperProvider
 
 class MainFragmentFactory(
     private val dependencies: Dependencies
@@ -25,5 +26,6 @@ class MainFragmentFactory(
     interface Dependencies {
         val storeFactory: StoreFactory
         val database: KonfDatabase
+        val stateKeeperProvider: StateKeeperProvider<Any>
     }
 }

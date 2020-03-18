@@ -6,6 +6,7 @@ import com.arkivanov.konf.shared.sessionlist.SessionListView
 import com.arkivanov.konf.shared.sessionlist.store.SessionListStore
 import com.arkivanov.konf.shared.sessionlist.store.SessionListStoreFactory
 import com.arkivanov.mvikotlin.core.binder.Binder
+import com.arkivanov.mvikotlin.core.utils.statekeeper.get
 import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.events
 import com.arkivanov.mvikotlin.extensions.reaktive.states
@@ -24,7 +25,9 @@ internal class SessionListComponentImpl(
             factory = dependencies.storeFactory,
             eventQueries = dependencies.database.eventQueries,
             sessionBundleQueries = dependencies.database.sessionBundleQueries
-        ).create().scope()
+        )
+            .create(stateKeeper = dependencies.stateKeeperProvider?.get())
+            .scope()
 
     private var binder: Binder? = null
 

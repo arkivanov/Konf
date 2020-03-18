@@ -2,6 +2,7 @@ package com.arkivanov.konf.shared.sessionlist
 
 import com.arkivanov.konf.database.KonfDatabase
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.core.utils.statekeeper.StateKeeperProvider
 
 interface SessionListComponent {
 
@@ -18,6 +19,7 @@ interface SessionListComponent {
     interface Dependencies {
         val storeFactory: StoreFactory
         val database: KonfDatabase
+        val stateKeeperProvider: StateKeeperProvider<Any>?
         val output: (Output) -> Unit
     }
 
