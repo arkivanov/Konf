@@ -116,6 +116,12 @@ object Deps {
             object AndroidDriver : Dependency(group = SqlDelight, name = "android-driver", version = version)
             object NativeDriver : Dependency(group = SqlDelight, name = "native-driver", version = version)
         }
+
+        object Picasso : Group(name = "com.squareup.picasso") {
+            private const val version = "2.71828"
+
+            object Picasso : Dependency(group = Squareup.Picasso, name = "picasso", version = version)
+        }
     }
 
     open class Group(val name: String)

@@ -28,6 +28,12 @@ class SessionListFragment(
         )
 
     private fun onSessionListComponentOutput(output: SessionListComponent.Output) {
+        when (output) {
+            is SessionListComponent.Output.Finished -> {
+            }
+
+            is SessionListComponent.Output.SessionSelected -> dependencies.onSessionSelected(output.id)
+        }.let {}
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,5 +75,6 @@ class SessionListFragment(
         val storeFactory: StoreFactory
         val database: KonfDatabase
         val stateKeeperProvider: StateKeeperProvider<Any>
+        val onSessionSelected: (id: String) -> Unit
     }
 }

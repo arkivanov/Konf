@@ -2,6 +2,7 @@
 CREATE TABLE EventEntity (
     title TEXT,
     description TEXT,
+    imageUrl TEXT,
     startDate INTEGER,
     endDate INTEGER,
     timeZone TEXT,

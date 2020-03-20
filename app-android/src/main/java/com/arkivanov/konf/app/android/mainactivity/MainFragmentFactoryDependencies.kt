@@ -7,8 +7,11 @@ import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 
 class MainFragmentFactoryDependencies(
     override val database: KonfDatabase,
-    override val stateKeeperProvider: StateKeeperProvider<Any>
+    override val stateKeeperProvider: StateKeeperProvider<Any>,
+    fragmentRouter: MainFragmentRouter
 ) : MainFragmentFactory.Dependencies {
 
     override val storeFactory: StoreFactory = DefaultStoreFactory
+
+    override val onSessionSelected: (id: String) -> Unit = fragmentRouter::openSessionDetails
 }

@@ -11,6 +11,7 @@ internal fun SessionDetailsStore.State.toViewModel(): SessionDetailsView.Model =
         isError = !isLoading && (session == null),
         title = session?.sessionTitle,
         description = session?.sessionDescription,
+        imageUrl = session?.sessionImageUrl,
         level = when (session?.sessionLevel) {
             SessionLevel.BEGINNER -> SessionDetailsView.Model.Level.BEGINNER
             SessionLevel.INTERMEDIATE -> SessionDetailsView.Model.Level.INTERMEDIATE
@@ -20,7 +21,11 @@ internal fun SessionDetailsStore.State.toViewModel(): SessionDetailsView.Model =
         },
         speakerName = session?.speakerName,
         speakerAvatarUrl = session?.speakerAvatarUrl,
-        speakerCompanyName = session?.speakerCompanyName
+        speakerJobInfo = "${session?.speakerJob} @ ${session?.speakerCompanyName}",
+        startDate = session?.sessionStartDate,
+        endDate = session?.sessionEndDate,
+        roomName = session?.roomName,
+        eventTimeZone = event?.timeZone ?: "GMT"
     )
 
 internal fun SessionDetailsStore.Label.toOutput(): Output? =
@@ -37,5 +42,5 @@ internal fun SessionDetailsView.Event.toOutput(): Output? =
 internal fun SessionDetailsView.Event.toIntent(): SessionDetailsStore.Intent? =
     when (this) {
         is SessionDetailsView.Event.CloseClicked -> null
-        is SessionDetailsView.Event.SpeakerClicked -> SessionDetailsStore.Intent.SelectSpaker
+        is SessionDetailsView.Event.SpeakerClicked -> SessionDetailsStore.Intent.SelectSpeaker
     }

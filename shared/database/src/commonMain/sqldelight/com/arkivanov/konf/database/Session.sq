@@ -6,7 +6,9 @@ CREATE TABLE SessionEntity (
     roomId TEXT,
     title TEXT,
     description TEXT,
-    date INTEGER,
+    imageUrl TEXT,
+    startDate INTEGER,
+    endDate INTEGER,
     level TEXT AS SessionLevel
 );
 

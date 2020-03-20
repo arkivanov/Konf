@@ -54,4 +54,5 @@ dependencies {
     implementation(Deps.AndroidX.Core.Ktx)
     implementation(Deps.Google.Android.Material.Material)
     implementation(Deps.Squareup.SqlDelight.AndroidDriver)
+    implementation(Deps.Squareup.Picasso.Picasso)
 }

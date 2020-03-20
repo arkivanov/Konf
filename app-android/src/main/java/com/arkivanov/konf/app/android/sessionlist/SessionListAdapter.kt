@@ -1,25 +1,19 @@
 package com.arkivanov.konf.app.android.sessionlist
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.arkivanov.konf.app.android.R
 import com.arkivanov.konf.app.android.utils.BindableViewHolder
-import com.arkivanov.konf.app.android.utils.ProvidableCache
 import com.arkivanov.konf.app.android.utils.dispatchUpdates
-import com.arkivanov.konf.app.android.utils.getLocaleCompat
+import com.arkivanov.konf.app.android.utils.formatDate
+import com.arkivanov.konf.app.android.utils.formatTime
 import com.arkivanov.konf.app.android.utils.layoutInflater
 import com.arkivanov.konf.app.android.utils.requireNotNull
 import com.arkivanov.konf.app.android.utils.requireViewWithId
 import com.arkivanov.konf.shared.sessionlist.SessionListView.Model.Item
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 
 class SessionListAdapter(
     private val onSessionClickListener: (id: String) -> Unit
@@ -69,18 +63,6 @@ class SessionListAdapter(
         (holder as BindableViewHolder<Item>).bind(items[position])
     }
 
-    private companion object {
-        private var timeFormatCache = ProvidableCache<Locale, DateFormat> { SimpleDateFormat.getTimeInstance(SimpleDateFormat.SHORT, it) }
-        private var timeZoneCache = ProvidableCache<String, TimeZone>(TimeZone::getTimeZone)
-
-        private fun getTimeFormat(context: Context, timeZone: String): DateFormat {
-            val timeFormat = timeFormatCache[context.resources.configuration.getLocaleCompat()]
-            timeFormat.timeZone = timeZoneCache[timeZone]
-
-            return timeFormat
-        }
-    }
-
     private enum class ViewType {
         DAY_SEPARATOR, SESSION_SEPARATOR, SESSION;
 
@@ -120,11 +102,11 @@ class SessionListAdapter(
 
             titleTextView.text = item.title
 
-            val timeFormat = getTimeFormat(context = context, timeZone = item.eventTimeZone)
-            val date = item.startDate?.let(::Date)?.let(timeFormat::format)
-            infoTextView.text = "$date, ${item.roomName}"
+            val startTimeText = item.startDate?.let { formatTime(context, item.eventTimeZone, it)}
+            val endTimeText = item.endDate?.let { formatTime(context, item.eventTimeZone, it)}
+            infoTextView.text = "$startTimeText-$endTimeText, ${item.roomName}"
 
-            speakerInfoTextView.text = "${item.speakerName} @ ${item.speakerCompanyName}"
+            speakerInfoTextView.text = item.speakerInfo
         }
     }
 }

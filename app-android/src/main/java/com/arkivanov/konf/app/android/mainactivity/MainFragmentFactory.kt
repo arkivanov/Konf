@@ -2,6 +2,7 @@ package com.arkivanov.konf.app.android.mainactivity
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
+import com.arkivanov.konf.app.android.sessiondetails.SessionDetailsFragment
 import com.arkivanov.konf.app.android.sessionlist.SessionListFragment
 import com.arkivanov.konf.database.KonfDatabase
 import com.arkivanov.mvikotlin.core.store.StoreFactory
@@ -23,9 +24,16 @@ class MainFragmentFactory(
             }
         )
 
+    fun sessionDetailsFragment(): SessionDetailsFragment =
+        SessionDetailsFragment(
+            object : SessionDetailsFragment.Dependencies, Dependencies by dependencies {
+            }
+        )
+
     interface Dependencies {
         val storeFactory: StoreFactory
         val database: KonfDatabase
         val stateKeeperProvider: StateKeeperProvider<Any>
+        val onSessionSelected: (id: String) -> Unit
     }
 }

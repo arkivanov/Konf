@@ -30,6 +30,7 @@ internal fun JsonObject.toSyncData(): SyncData {
         event = EventEntity.Impl(
             title = "Awesome Conference",
             description = "My awesome conference with logs of interesting sessions",
+            imageUrl = IMAGE_URL,
             startDate = EVENT_START_DATE,
             endDate = EVENT_START_DATE + (EVENT_DAY_COUNT - 1).toLong() * DAY_IN_MILLIS,
             timeZone = EVENT_TIME_ZONE,
@@ -78,7 +79,9 @@ private fun session(
         roomId = rooms.list.random().id,
         title = sentence(wordRange = 2..6, capitalizeWords = true),
         description = sentences(sentenceRange = 3..10, wordRange = 3..10),
-        date = getRandomDateTimeDuringEvent(index = index),
+        imageUrl = IMAGE_URL,
+        startDate = getRandomDateTimeDuringEvent(index = index),
+        endDate = getRandomDateTimeDuringEvent(index = index) + 40L * 60L * 1000L,
         level = SessionLevel.VALUES.random()
     )
 
@@ -119,13 +122,13 @@ private fun word(capitalize: Boolean = false): String =
         .let { if (capitalize) it.capitalize() else it }
 
 private fun sentence(wordRange: IntRange, capitalizeWords: Boolean = false): String =
-    (0..wordRange.random())
+    (0 until wordRange.random())
         .asSequence()
         .map { index -> word(capitalize = (index == 0) || capitalizeWords) }
         .joinToString(separator = " ")
 
 private fun sentences(sentenceRange: IntRange, wordRange: IntRange): String =
-    (0..sentenceRange.random())
+    (0 until sentenceRange.random())
         .asSequence()
         .map { sentence(wordRange = wordRange) }
         .joinToString(separator = ". ", postfix = ".")

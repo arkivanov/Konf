@@ -3,34 +3,44 @@ package com.arkivanov.konf.app.android.mainactivity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.arkivanov.konf.app.android.utils.app
+import com.arkivanov.konf.database.KonfDatabase
+import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.statekeeper.SimpleStateKeeperContainer
+import com.arkivanov.mvikotlin.core.utils.statekeeper.StateKeeperProvider
 import com.arkivanov.mvikotlin.core.utils.statekeeper.saveAndGet
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MainFragmentFactory.Dependencies {
 
     private val nonConfigurationStateKeeperContainer = SimpleStateKeeperContainer()
+    private val fragmentFactory = MainFragmentFactory(this)
+
+    private val router by lazy {
+        MainFragmentRouter(
+            fragmentManager = supportFragmentManager,
+            fragmentFactory = fragmentFactory,
+            contentId = android.R.id.content
+        )
+    }
+
+    override val storeFactory: StoreFactory = DefaultStoreFactory
+    override val database: KonfDatabase get() = app.database
+
+    @Suppress("UNCHECKED_CAST")
+    override val stateKeeperProvider: StateKeeperProvider<Any> =
+        nonConfigurationStateKeeperContainer.getProvider(
+            savedState = lastCustomNonConfigurationInstance as MutableMap<String, Any>?
+        )
+
+    override val onSessionSelected: (id: String) -> Unit = { router.openSessionDetails(it) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        @Suppress("UNCHECKED_CAST", "DEPRECATION")
-        val fragmentFactory =
-            MainFragmentFactory(
-                MainFragmentFactoryDependencies(
-                    database = app.database,
-                    stateKeeperProvider = nonConfigurationStateKeeperContainer.getProvider(
-                        savedState = lastCustomNonConfigurationInstance as MutableMap<String, Any>?
-                    )
-                )
-            )
-
         supportFragmentManager.fragmentFactory = fragmentFactory
 
         super.onCreate(savedInstanceState)
 
         if (savedInstanceState == null) {
-            supportFragmentManager
-                .beginTransaction()
-                .add(android.R.id.content, fragmentFactory.sessionListFragment())
-                .commit()
+            router.openSessionList()
         }
     }
 

@@ -1,5 +1,7 @@
 package com.arkivanov.konf.shared.sessiondetails.store
 
+import com.arkivanov.konf.database.EventEntity
+import com.arkivanov.konf.database.EventQueries
 import com.arkivanov.konf.database.SessionBundle
 import com.arkivanov.konf.database.SessionBundleQueries
 import com.arkivanov.konf.database.listenOne
@@ -11,13 +13,14 @@ import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import com.badoo.reaktive.observable.map
+import com.badoo.reaktive.observable.combineLatest
 import com.badoo.reaktive.observable.observeOn
 import com.badoo.reaktive.scheduler.mainScheduler
 
 internal class SessionDetailsStoreFactory(
     private val sessionId: String,
     private val factory: StoreFactory,
+    private val eventQueries: EventQueries,
     private val sessionBundleQueries: SessionBundleQueries
 ) {
 
@@ -32,13 +35,13 @@ internal class SessionDetailsStoreFactory(
         }
 
     private sealed class Result {
-        data class Data(val session: SessionBundle?) : Result()
+        data class Data(val event: EventEntity?, val session: SessionBundle?) : Result()
     }
 
     private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
         override fun executeIntent(intent: Intent, getState: () -> State) {
             when (intent) {
-                is Intent.SelectSpaker -> selectSpeaker(getState())
+                is Intent.SelectSpeaker -> selectSpeaker(getState())
             }.let {}
         }
 
@@ -49,10 +52,11 @@ internal class SessionDetailsStoreFactory(
         }
 
         override fun executeAction(action: Unit, getState: () -> State) {
-            sessionBundleQueries
-                .getById(id = sessionId)
-                .listenOne()
-                .map(Result::Data)
+            combineLatest(
+                eventQueries.get().listenOne(),
+                sessionBundleQueries.getById(id = sessionId).listenOne(),
+                Result::Data
+            )
                 .observeOn(mainScheduler)
                 .subscribeScoped(isThreadLocal = true, onNext = ::dispatch)
         }
@@ -61,7 +65,7 @@ internal class SessionDetailsStoreFactory(
     private object ReducerImpl : Reducer<State, Result> {
         override fun State.reduce(result: Result): State =
             when (result) {
-                is Result.Data -> copy(isLoading = false, session = result.session)
+                is Result.Data -> copy(isLoading = false, event = result.event, session = result.session)
             }
     }
 }

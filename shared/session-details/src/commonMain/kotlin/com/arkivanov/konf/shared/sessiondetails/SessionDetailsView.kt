@@ -11,10 +11,15 @@ interface SessionDetailsView : MviView<Model, Event> {
         val isError: Boolean,
         val title: String?,
         val description: String?,
+        val imageUrl: String?,
         val level: Level?,
         val speakerName: String?,
         val speakerAvatarUrl: String?,
-        val speakerCompanyName: String?
+        val speakerJobInfo: String?,
+        val startDate: Long?,
+        val endDate: Long?,
+        val roomName: String?,
+        val eventTimeZone: String
     ) {
         enum class Level {
             BEGINNER, INTERMEDIATE, ADVANCED, EXPERT

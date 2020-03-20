@@ -26,9 +26,9 @@ private fun SessionBundle.toSessionModel(eventTimeZone: String?): Model.Item.Ses
     Model.Item.Session(
         id = sessionId,
         title = sessionTitle,
-        speakerName = speakerName,
-        speakerCompanyName = speakerCompanyName,
-        startDate = sessionDate,
+        speakerInfo = "$speakerName @ $speakerCompanyName",
+        startDate = sessionStartDate,
+        endDate = sessionEndDate,
         roomName = roomName,
         eventTimeZone = eventTimeZone ?: "GMT"
     )

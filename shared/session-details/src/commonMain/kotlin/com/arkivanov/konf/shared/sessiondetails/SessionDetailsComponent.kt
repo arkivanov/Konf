@@ -1,11 +1,9 @@
 package com.arkivanov.konf.shared.sessiondetails
 
 import com.arkivanov.konf.database.KonfDatabase
-import com.arkivanov.konf.shared.sessiondetails.SessionDetailsComponent.Output
 import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.badoo.reaktive.observable.Observable
 
-interface SessionDetailsComponent : Observable<Output> {
+interface SessionDetailsComponent {
 
     fun onViewCreated(view: SessionDetailsView)
 
@@ -21,6 +19,7 @@ interface SessionDetailsComponent : Observable<Output> {
         val sessionId: String
         val storeFactory: StoreFactory
         val database: KonfDatabase
+        val output: (Output) -> Unit
     }
 
     sealed class Output {

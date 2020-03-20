@@ -47,11 +47,11 @@ internal class SessionListStoreFactory(
             return if ((eventStartDate == null) || (eventEndDate == null) || (eventEndDate <= eventStartDate)) {
                 sessions.map(State.Item::Session)
             } else {
-                val groups = sessions.groupBy { dayNumber(eventDate = eventStartDate, sessionDate = it.sessionDate?.truncateToDay()) }
+                val groups = sessions.groupBy { dayNumber(eventDate = eventStartDate, sessionDate = it.sessionStartDate?.truncateToDay()) }
                 val items = ArrayList<State.Item>()
                 groups.forEach { (dayNumber, sessionsOfDay) ->
                     items.add(State.Item.DaySeparator(number = dayNumber))
-                    val groupByStartDate = sessionsOfDay.groupBy(SessionBundle::sessionDate)
+                    val groupByStartDate = sessionsOfDay.groupBy(SessionBundle::sessionStartDate)
                     if (groupByStartDate.size > 1) {
                         groupByStartDate.values.forEach { sessionsOfStartDate ->
                             items.addAll(sessionsOfStartDate.map(State.Item::Session))
