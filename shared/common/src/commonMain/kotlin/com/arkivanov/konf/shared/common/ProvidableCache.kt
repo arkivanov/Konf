@@ -1,12 +1,10 @@
-package com.arkivanov.konf.app.android.utils
+package com.arkivanov.konf.shared.common
 
-import androidx.collection.ArrayMap
-
-class ProvidableCache<K, V : Any>(
+class ProvidableCache<in K, out V : Any>(
     private val provider: (K) -> V
 ) {
 
-    private val cache = ArrayMap<K, V>()
+    private val cache = HashMap<K, V>()
 
     operator fun get(key: K): V {
         var value: V? = cache[key]

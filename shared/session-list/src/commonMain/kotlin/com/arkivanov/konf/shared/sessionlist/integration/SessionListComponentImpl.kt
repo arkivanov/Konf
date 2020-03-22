@@ -3,7 +3,6 @@ package com.arkivanov.konf.shared.sessionlist.integration
 import com.arkivanov.konf.shared.sessionlist.SessionListComponent
 import com.arkivanov.konf.shared.sessionlist.SessionListComponent.Dependencies
 import com.arkivanov.konf.shared.sessionlist.SessionListView
-import com.arkivanov.konf.shared.sessionlist.store.SessionListStore
 import com.arkivanov.konf.shared.sessionlist.store.SessionListStoreFactory
 import com.arkivanov.mvikotlin.core.binder.Binder
 import com.arkivanov.mvikotlin.core.utils.statekeeper.get
@@ -34,7 +33,7 @@ internal class SessionListComponentImpl(
     override fun onViewCreated(view: SessionListView) {
         binder =
             bind {
-                store.states.map(SessionListStore.State::toViewModel) bindTo view
+                store.states.map { it.toViewModel(timeFormatProvider = dependencies.timeFormatProvider) } bindTo view
                 view.events.mapNotNull(SessionListView.Event::toOutput) bindTo dependencies.output
             }
     }

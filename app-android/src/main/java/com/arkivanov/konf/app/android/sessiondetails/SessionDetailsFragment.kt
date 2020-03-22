@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import com.arkivanov.konf.app.android.R
 import com.arkivanov.konf.app.android.utils.requireNotNull
 import com.arkivanov.konf.database.KonfDatabase
+import com.arkivanov.konf.shared.common.dateformat.DateFormat
+import com.arkivanov.konf.shared.common.timeformat.TimeFormat
 import com.arkivanov.konf.shared.sessiondetails.SessionDetailsComponent
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 
@@ -74,5 +76,7 @@ class SessionDetailsFragment(
     interface Dependencies {
         val storeFactory: StoreFactory
         val database: KonfDatabase
+        val dateFormatProvider: DateFormat.Provider
+        val timeFormatProvider: TimeFormat.Provider
     }
 }

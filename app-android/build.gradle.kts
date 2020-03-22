@@ -37,6 +37,7 @@ android {
 
 dependencies {
     implementation(project(":shared:database"))
+    implementation(project(":shared:common"))
     implementation(project(":shared:sync"))
     implementation(project(":shared:session-list"))
     implementation(project(":shared:session-details"))

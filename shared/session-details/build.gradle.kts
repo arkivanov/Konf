@@ -5,6 +5,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":shared:database"))
+                implementation(project(":shared:common"))
                 implementation(Deps.Badoo.Reaktive.Reaktive)
                 implementation(Deps.Badoo.Reaktive.ReaktiveAnnotations)
                 implementation(Deps.ArkIvanov.MviKotlin.MviKotlin)

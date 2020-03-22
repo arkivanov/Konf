@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.arkivanov.konf.app.android.R
 import com.arkivanov.konf.app.android.utils.BindableViewHolder
 import com.arkivanov.konf.app.android.utils.dispatchUpdates
-import com.arkivanov.konf.app.android.utils.formatDate
-import com.arkivanov.konf.app.android.utils.formatTime
 import com.arkivanov.konf.app.android.utils.layoutInflater
 import com.arkivanov.konf.app.android.utils.requireNotNull
 import com.arkivanov.konf.app.android.utils.requireViewWithId
@@ -101,11 +99,7 @@ class SessionListAdapter(
             super.bind(item)
 
             titleTextView.text = item.title
-
-            val startTimeText = item.startDate?.let { formatTime(context, item.eventTimeZone, it)}
-            val endTimeText = item.endDate?.let { formatTime(context, item.eventTimeZone, it)}
-            infoTextView.text = "$startTimeText-$endTimeText, ${item.roomName}"
-
+            infoTextView.text = item.info
             speakerInfoTextView.text = item.speakerInfo
         }
     }

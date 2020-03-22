@@ -1,11 +1,18 @@
 package com.arkivanov.konf.shared.sessiondetails.integration
 
+import com.arkivanov.konf.database.EventEntity
+import com.arkivanov.konf.database.SessionBundle
 import com.arkivanov.konf.database.SessionLevel
+import com.arkivanov.konf.shared.common.dateformat.DateFormat
+import com.arkivanov.konf.shared.common.timeformat.TimeFormat
 import com.arkivanov.konf.shared.sessiondetails.SessionDetailsComponent.Output
 import com.arkivanov.konf.shared.sessiondetails.SessionDetailsView
 import com.arkivanov.konf.shared.sessiondetails.store.SessionDetailsStore
 
-internal fun SessionDetailsStore.State.toViewModel(): SessionDetailsView.Model =
+internal fun SessionDetailsStore.State.toViewModel(
+    dateFormatProvider: DateFormat.Provider,
+    timeFormatProvider: TimeFormat.Provider
+): SessionDetailsView.Model =
     SessionDetailsView.Model(
         isLoading = isLoading,
         isError = !isLoading && (session == null),
@@ -19,14 +26,31 @@ internal fun SessionDetailsStore.State.toViewModel(): SessionDetailsView.Model =
             SessionLevel.EXPERT -> SessionDetailsView.Model.Level.EXPERT
             null -> null
         },
+        info = formatSessionInfo(session, event, dateFormatProvider, timeFormatProvider),
         speakerName = session?.speakerName,
         speakerAvatarUrl = session?.speakerAvatarUrl,
-        speakerJobInfo = "${session?.speakerJob} @ ${session?.speakerCompanyName}",
-        startDate = session?.sessionStartDate,
-        endDate = session?.sessionEndDate,
-        roomName = session?.roomName,
-        eventTimeZone = event?.timeZone ?: "GMT"
+        speakerJobInfo = session?.formatSpeakerInfo()
     )
+
+private fun formatSessionInfo(
+    session: SessionBundle?,
+    event: EventEntity?,
+    dateFormatProvider: DateFormat.Provider,
+    timeFormatProvider: TimeFormat.Provider
+): String? {
+    if ((session == null) || (event == null)) {
+        return null
+    }
+
+    val dateFormat = dateFormatProvider.get(timeZone = event.timeZone ?: "UTC")
+    val timeFormat = timeFormatProvider.get(timeZone = event.timeZone ?: "UTC")
+
+    return "${session.sessionStartDate?.let(dateFormat::format)}, " +
+        "${session.sessionStartDate?.let(timeFormat::format)}-${session.sessionStartDate?.let(timeFormat::format)}, " +
+        "${session.roomName}"
+}
+
+private fun SessionBundle.formatSpeakerInfo(): String = "$speakerJob @ $speakerCompanyName"
 
 internal fun SessionDetailsStore.Label.toOutput(): Output? =
     when (this) {

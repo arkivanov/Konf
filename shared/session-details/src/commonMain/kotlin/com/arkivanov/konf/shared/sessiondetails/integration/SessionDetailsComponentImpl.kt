@@ -37,7 +37,7 @@ internal class SessionDetailsComponentImpl(
     override fun onViewCreated(view: SessionDetailsView) {
         binder =
             bind {
-                store.states.map(SessionDetailsStore.State::toViewModel) bindTo view
+                store.states.map { it.toViewModel(dependencies.dateFormatProvider, dependencies.timeFormatProvider) } bindTo view
                 view.events.mapNotNull(SessionDetailsView.Event::toIntent) bindTo store
                 view.events.mapNotNull(SessionDetailsView.Event::toOutput) bindTo dependencies.output
             }

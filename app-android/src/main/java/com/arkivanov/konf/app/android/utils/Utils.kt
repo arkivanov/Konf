@@ -17,35 +17,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.arkivanov.konf.app.android.App
 import com.arkivanov.konf.app.android.R
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-import java.util.Date
+import com.squareup.picasso.Picasso
 import java.util.Locale
-import java.util.TimeZone
-
-private var timeFormatCache = ProvidableCache<Locale, DateFormat> { SimpleDateFormat("h:mm", it) }
-private var dateFormatCache = ProvidableCache<Locale, DateFormat> { SimpleDateFormat("E dd", it) }
-private var timeZoneCache = ProvidableCache<String, TimeZone>(TimeZone::getTimeZone)
-
-private fun getTimeFormat(context: Context, timeZone: String): DateFormat {
-    val timeFormat = timeFormatCache[context.resources.configuration.getLocaleCompat()]
-    timeFormat.timeZone = timeZoneCache[timeZone]
-
-    return timeFormat
-}
-
-private fun getDateFormat(context: Context, timeZone: String): DateFormat {
-    val dateFormat = dateFormatCache[context.resources.configuration.getLocaleCompat()]
-    dateFormat.timeZone = timeZoneCache[timeZone]
-
-    return dateFormat
-}
-
-fun formatTime(context: Context, timeZone: String, millis: Long): String =
-    getTimeFormat(context = context, timeZone = timeZone).format(Date(millis))
-
-fun formatDate(context: Context, timeZone: String, millis: Long): String =
-    getDateFormat(context = context, timeZone = timeZone).format(Date(millis))
 
 fun <T : Any> T?.requireNotNull(): T = requireNotNull(this)
 
@@ -86,4 +59,8 @@ fun ImageView.clipToCircle() {
         }
 
     clipToOutline = true
+}
+
+fun ImageView.loadImage(url: String?) {
+    Picasso.get().load(url).into(this)
 }

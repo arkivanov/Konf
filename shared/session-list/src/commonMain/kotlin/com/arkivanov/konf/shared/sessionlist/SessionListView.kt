@@ -17,11 +17,8 @@ interface SessionListView : MviView<Model, Event> {
             data class Session(
                 val id: String,
                 val title: String?,
-                val speakerInfo: String?,
-                val startDate: Long?,
-                val endDate: Long?,
-                val roomName: String?,
-                val eventTimeZone: String
+                val info: String,
+                val speakerInfo: String
             ) : Item()
         }
     }
