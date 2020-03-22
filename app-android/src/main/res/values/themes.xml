@@ -5,6 +5,6 @@
         <item name="colorPrimary">#008577</item>
         <item name="colorPrimaryDark">#00574B</item>
         <item name="colorAccent">#D81B60</item>
-        <item name="colorPlaceholder">#C0C0C0</item>
+        <item name="avatarPlaceholder">@drawable/ic_avatar_placeholder</item>
     </style>
 </resources>

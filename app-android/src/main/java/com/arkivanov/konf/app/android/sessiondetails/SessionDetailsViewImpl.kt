@@ -35,6 +35,9 @@ class SessionDetailsViewImpl(root: View) : DiffMviView<Model, Event>(), SessionD
         diff(get = Model::info, bind = infoTextView::setText)
         diff(get = Model::speakerName, bind = speakerNameTextView::setText)
         diff(get = Model::speakerJobInfo, bind = speakerJobTextView::setText)
-        diff(get = Model::speakerAvatarUrl, bind = speakerAvatarImageView::loadImage)
+
+        diff(get = Model::speakerAvatarUrl) {
+            speakerAvatarImageView.loadImage(url = it, placeholderAttrId = R.attr.avatarPlaceholder)
+        }
     }
 }

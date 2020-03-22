@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Outline
+import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.ImageView
+import androidx.annotation.AttrRes
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
@@ -61,6 +63,24 @@ fun ImageView.clipToCircle() {
     clipToOutline = true
 }
 
+private fun Resources.Theme.resolveAttribute(@AttrRes attrId: Int): TypedValue? =
+    TypedValue().takeIf { resolveAttribute(attrId, it, true) }
+
 fun ImageView.loadImage(url: String?) {
-    Picasso.get().load(url).into(this)
+    loadImage(url = url, placeholder = null)
+}
+
+fun ImageView.loadImage(url: String?, @AttrRes placeholderAttrId: Int) {
+    loadImage(
+        url = url,
+        placeholder = context.theme.resolveAttribute(attrId = placeholderAttrId)?.resourceId?.let(context::getDrawable)
+    )
+}
+
+fun ImageView.loadImage(url: String?, placeholder: Drawable?) {
+    Picasso
+        .get()
+        .load(url)
+        .run { if (placeholder != null) placeholder(placeholder) else this }
+        .into(this)
 }

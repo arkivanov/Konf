@@ -90,7 +90,7 @@ private fun speaker(index: Int, companies: ObjectGenerator<CompanyEntity>): Spea
         id = getId(index),
         companyId = companies.generate(::company).id,
         name = sentence(wordRange = 2..3, capitalizeWords = true),
-        avatarUrl = IMAGE_URL,
+        avatarUrl = null,
         imageUrl = IMAGE_URL,
         job = sentence(wordRange = 1..3, capitalizeWords = true),
         location = sentence(wordRange = 1..2, capitalizeWords = true),
