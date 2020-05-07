@@ -105,6 +105,9 @@ object Deps {
 
             object MviKotlinExtensionsReaktive :
                 Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin-extensions-reaktive", version = version)
+
+            object AndroidxLifecycleInterop :
+                Dependency(group = ArkIvanov.MviKotlin, name = "androidx-lifecycle-interop", version = version)
         }
     }
 

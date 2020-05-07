@@ -5,20 +5,21 @@ import com.arkivanov.konf.shared.sessiondetails.SessionDetailsComponent.Dependen
 import com.arkivanov.konf.shared.sessiondetails.SessionDetailsView
 import com.arkivanov.konf.shared.sessiondetails.store.SessionDetailsStore
 import com.arkivanov.konf.shared.sessiondetails.store.SessionDetailsStoreFactory
-import com.arkivanov.mvikotlin.core.binder.Binder
+import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
+import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
+import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.events
 import com.arkivanov.mvikotlin.extensions.reaktive.labels
 import com.arkivanov.mvikotlin.extensions.reaktive.states
 import com.badoo.reaktive.annotations.ExperimentalReaktiveApi
-import com.badoo.reaktive.disposable.scope.DisposableScope
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.mapNotNull
 
 @UseExperimental(ExperimentalReaktiveApi::class)
 internal class SessionDetailsComponentImpl(
     private val dependencies: Dependencies
-) : SessionDetailsComponent, DisposableScope by DisposableScope() {
+) : SessionDetailsComponent {
 
     private val store =
         SessionDetailsStoreFactory(
@@ -26,36 +27,24 @@ internal class SessionDetailsComponentImpl(
             factory = dependencies.storeFactory,
             eventQueries = dependencies.database.eventQueries,
             sessionBundleQueries = dependencies.database.sessionBundleQueries
-        ).create().scope()
-
-    private var binder: Binder? = null
+        ).create()
 
     init {
-        store.labels.mapNotNull(SessionDetailsStore.Label::toOutput).subscribeScoped(onNext = dependencies.output)
+        bind(dependencies.lifecycle, BinderLifecycleMode.START_STOP) {
+            store.labels.mapNotNull(SessionDetailsStore.Label::toOutput) bindTo dependencies.output
+        }
+
+        dependencies.lifecycle.doOnDestroy(store::dispose)
     }
 
-    override fun onViewCreated(view: SessionDetailsView) {
-        binder =
-            bind {
-                store.states.map { it.toViewModel(dependencies.dateFormatProvider, dependencies.timeFormatProvider) } bindTo view
-                view.events.mapNotNull(SessionDetailsView.Event::toIntent) bindTo store
-                view.events.mapNotNull(SessionDetailsView.Event::toOutput) bindTo dependencies.output
-            }
-    }
+    override fun onViewCreated(view: SessionDetailsView, viewLifecycle: Lifecycle) {
+        bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
+            view.events.mapNotNull(SessionDetailsView.Event::toIntent) bindTo store
+        }
 
-    override fun onStart() {
-        binder?.start()
-    }
-
-    override fun onStop() {
-        binder?.stop()
-    }
-
-    override fun onViewDestroyed() {
-        binder = null
-    }
-
-    override fun onDestroy() {
-        dispose()
+        bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
+            view.events.mapNotNull(SessionDetailsView.Event::toOutput) bindTo dependencies.output
+            store.states.map { it.toViewModel(dependencies.dateFormatProvider, dependencies.timeFormatProvider) } bindTo view
+        }
     }
 }

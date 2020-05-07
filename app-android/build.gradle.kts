@@ -45,6 +45,7 @@ dependencies {
 
     implementation(Deps.ArkIvanov.MviKotlin.MviKotlin)
     implementation(Deps.ArkIvanov.MviKotlin.MviKotlinMain)
+    implementation(Deps.ArkIvanov.MviKotlin.AndroidxLifecycleInterop)
     implementation(Deps.Jetbrains.Kotlin.StdLib.Jdk7)
     implementation(Deps.AndroidX.AppCompat.AppCompat)
     implementation(Deps.AndroidX.RecyclerView.RecyclerView)

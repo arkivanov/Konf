@@ -6,18 +6,19 @@ import com.arkivanov.konf.shared.sync.SyncView
 import com.arkivanov.konf.shared.sync.datasource.SyncDataSourceImpl
 import com.arkivanov.konf.shared.sync.store.SyncStore
 import com.arkivanov.konf.shared.sync.store.SyncStoreFactory
-import com.arkivanov.mvikotlin.core.binder.Binder
+import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
+import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
+import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.events
 import com.arkivanov.mvikotlin.extensions.reaktive.states
 import com.badoo.reaktive.annotations.ExperimentalReaktiveApi
-import com.badoo.reaktive.disposable.scope.DisposableScope
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.mapNotNull
 import kotlinx.serialization.json.JsonObject
 
 @UseExperimental(ExperimentalReaktiveApi::class)
-internal class SyncComponentImpl(dependencies: Dependencies) : SyncComponent, DisposableScope by DisposableScope() {
+internal class SyncComponentImpl(dependencies: Dependencies) : SyncComponent {
 
     private val store: SyncStore =
         SyncStoreFactory(
@@ -25,31 +26,19 @@ internal class SyncComponentImpl(dependencies: Dependencies) : SyncComponent, Di
             dataSource = SyncDataSourceImpl(),
             mapper = JsonObject::toSyncData,
             database = dependencies.database
-        ).create().scope()
+        ).create()
 
-    private var binder: Binder? = null
-
-    override fun onViewCreated(view: SyncView) {
-        binder =
-            bind {
-                store.states.map(SyncStore.State::toViewModel) bindTo view
-                view.events.mapNotNull(SyncView.Event::toIntent) bindTo store
-            }
+    init {
+        dependencies.lifecycle.doOnDestroy(store::dispose)
     }
 
-    override fun onStart() {
-        binder?.start()
-    }
+    override fun onViewCreated(view: SyncView, viewLifecycle: Lifecycle) {
+        bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
+            view.events.mapNotNull(SyncView.Event::toIntent) bindTo store
+        }
 
-    override fun onStop() {
-        binder?.stop()
-    }
-
-    override fun onViewDestroyed() {
-        binder = null
-    }
-
-    override fun onDestroy() {
-        dispose()
+        bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
+            store.states.map(SyncStore.State::toViewModel) bindTo view
+        }
     }
 }

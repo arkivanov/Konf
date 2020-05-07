@@ -10,6 +10,8 @@ import com.arkivanov.konf.database.KonfDatabase
 import com.arkivanov.konf.shared.common.dateformat.DateFormat
 import com.arkivanov.konf.shared.common.timeformat.TimeFormat
 import com.arkivanov.konf.shared.sessiondetails.SessionDetailsComponent
+import com.arkivanov.mvikotlin.androidxlifecycleinterop.asMviLifecycle
+import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 
 class SessionDetailsFragment(
@@ -19,6 +21,7 @@ class SessionDetailsFragment(
     private val sessionDetailsComponent by lazy {
         SessionDetailsComponent(
             object : SessionDetailsComponent.Dependencies, Dependencies by dependencies {
+                override val lifecycle: Lifecycle = this@SessionDetailsFragment.lifecycle.asMviLifecycle()
                 override val sessionId: String get() = arguments.requireNotNull().getString(ARG_SESSION_ID).requireNotNull()
                 override val output: (SessionDetailsComponent.Output) -> Unit = ::onSessionDetailsComponentOutput
             }
@@ -42,31 +45,7 @@ class SessionDetailsFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sessionDetailsComponent.onViewCreated(SessionDetailsViewImpl(root = view))
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        sessionDetailsComponent.onStart()
-    }
-
-    override fun onStop() {
-        sessionDetailsComponent.onStop()
-
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        sessionDetailsComponent.onViewDestroyed()
-
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        sessionDetailsComponent.onDestroy()
-
-        super.onDestroy()
+        sessionDetailsComponent.onViewCreated(SessionDetailsViewImpl(root = view), viewLifecycleOwner.lifecycle.asMviLifecycle())
     }
 
     private companion object {

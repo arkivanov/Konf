@@ -8,22 +8,37 @@ import com.arkivanov.konf.database.KonfDatabase
 import com.arkivanov.konf.shared.common.timeformat.TimeFormat
 import com.arkivanov.konf.shared.sessionlist.SessionListComponent
 import com.arkivanov.konf.shared.sync.SyncComponent
+import com.arkivanov.mvikotlin.androidxlifecycleinterop.asMviLifecycle
+import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.core.utils.statekeeper.StateKeeperProvider
+import com.arkivanov.mvikotlin.core.utils.statekeeper.retainInstance
 
 class SessionListFragment(
     private val dependencies: Dependencies
 ) : Fragment(R.layout.session_list) {
 
     private val syncComponent =
+        dependencies
+            .stateKeeperProvider
+            .retainInstance(lifecycle = lifecycle.asMviLifecycle(), factory = ::createSyncComponent)
+
+    private fun createSyncComponent(lifecycle: Lifecycle): SyncComponent =
         SyncComponent(
             object : SyncComponent.Dependencies, Dependencies by dependencies {
+                override val lifecycle: Lifecycle = lifecycle
             }
         )
 
-    private val sessionListComponent =
+    private val listComponent =
+        dependencies
+            .stateKeeperProvider
+            .retainInstance(lifecycle = lifecycle.asMviLifecycle(), factory = ::createListComponent)
+
+    private fun createListComponent(lifecycle: Lifecycle): SessionListComponent =
         SessionListComponent(
             object : SessionListComponent.Dependencies, Dependencies by dependencies {
+                override val lifecycle: Lifecycle = lifecycle
                 override val output: (SessionListComponent.Output) -> Unit = ::onSessionListComponentOutput
             }
         )
@@ -40,36 +55,9 @@ class SessionListFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        syncComponent.onViewCreated(SyncViewImpl(root = view))
-        sessionListComponent.onViewCreated(SessionListViewImpl(root = view))
-    }
-
-    override fun onStart() {
-        super.onStart()
-
-        sessionListComponent.onStart()
-        syncComponent.onStart()
-    }
-
-    override fun onStop() {
-        sessionListComponent.onStop()
-        syncComponent.onStop()
-
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        sessionListComponent.onViewDestroyed()
-        syncComponent.onViewDestroyed()
-
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        sessionListComponent.onViewDestroyed()
-        syncComponent.onDestroy()
-
-        super.onDestroy()
+        val viewLifecycle = viewLifecycleOwner.lifecycle.asMviLifecycle()
+        syncComponent.onViewCreated(SyncViewImpl(root = view), viewLifecycle)
+        listComponent.onViewCreated(SessionListViewImpl(root = view), viewLifecycle)
     }
 
     interface Dependencies {
