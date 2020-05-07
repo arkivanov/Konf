@@ -17,6 +17,7 @@ class MainFragmentFactory(
     override fun instantiate(classLoader: ClassLoader, className: String): Fragment =
         when (className) {
             SessionListFragment::class.java.name -> sessionListFragment()
+            SessionDetailsFragment::class.java.name -> sessionDetailsFragment()
             else -> super.instantiate(classLoader, className)
         }
 

@@ -23,12 +23,8 @@ class SessionDetailsFragment(
             object : SessionDetailsComponent.Dependencies, Dependencies by dependencies {
                 override val lifecycle: Lifecycle = this@SessionDetailsFragment.lifecycle.asMviLifecycle()
                 override val sessionId: String get() = arguments.requireNotNull().getString(ARG_SESSION_ID).requireNotNull()
-                override val output: (SessionDetailsComponent.Output) -> Unit = ::onSessionDetailsComponentOutput
             }
         )
-    }
-
-    private fun onSessionDetailsComponentOutput(output: SessionDetailsComponent.Output) {
     }
 
     fun setArguments(sessionId: String): SessionDetailsFragment =
@@ -36,16 +32,14 @@ class SessionDetailsFragment(
             arguments = bundleOf(ARG_SESSION_ID to sessionId)
         }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        retainInstance = true
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        sessionDetailsComponent.onViewCreated(SessionDetailsViewImpl(root = view), viewLifecycleOwner.lifecycle.asMviLifecycle())
+        val viewLifecycle = viewLifecycleOwner.lifecycle.asMviLifecycle()
+        sessionDetailsComponent.onViewCreated(SessionDetailsViewImpl(root = view), ::onSessionDetailsComponentOutput, viewLifecycle)
+    }
+
+    private fun onSessionDetailsComponentOutput(output: SessionDetailsComponent.Output) {
     }
 
     private companion object {

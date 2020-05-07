@@ -31,9 +31,9 @@ internal class SessionListComponentImpl(
         dependencies.lifecycle.doOnDestroy(store::dispose)
     }
 
-    override fun onViewCreated(view: SessionListView, viewLifecycle: Lifecycle) {
+    override fun onViewCreated(view: SessionListView, output: (SessionListComponent.Output) -> Unit, viewLifecycle: Lifecycle) {
         bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
-            view.events.mapNotNull(SessionListView.Event::toOutput) bindTo dependencies.output
+            view.events.mapNotNull(SessionListView.Event::toOutput) bindTo output
         }
 
         bind(viewLifecycle, BinderLifecycleMode.START_STOP) {

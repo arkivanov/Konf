@@ -7,14 +7,13 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 
 interface SessionListComponent {
 
-    fun onViewCreated(view: SessionListView, viewLifecycle: Lifecycle)
+    fun onViewCreated(view: SessionListView, output: (Output) -> Unit, viewLifecycle: Lifecycle)
 
     interface Dependencies {
         val storeFactory: StoreFactory
         val database: KonfDatabase
         val lifecycle: Lifecycle
         val timeFormatProvider: TimeFormat.Provider
-        val output: (Output) -> Unit
     }
 
     sealed class Output {

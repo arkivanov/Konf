@@ -30,20 +30,17 @@ internal class SessionDetailsComponentImpl(
         ).create()
 
     init {
-        bind(dependencies.lifecycle, BinderLifecycleMode.START_STOP) {
-            store.labels.mapNotNull(SessionDetailsStore.Label::toOutput) bindTo dependencies.output
-        }
-
         dependencies.lifecycle.doOnDestroy(store::dispose)
     }
 
-    override fun onViewCreated(view: SessionDetailsView, viewLifecycle: Lifecycle) {
+    override fun onViewCreated(view: SessionDetailsView, output: (SessionDetailsComponent.Output) -> Unit, viewLifecycle: Lifecycle) {
         bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
             view.events.mapNotNull(SessionDetailsView.Event::toIntent) bindTo store
         }
 
         bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
-            view.events.mapNotNull(SessionDetailsView.Event::toOutput) bindTo dependencies.output
+            store.labels.mapNotNull(SessionDetailsStore.Label::toOutput) bindTo output
+            view.events.mapNotNull(SessionDetailsView.Event::toOutput) bindTo output
             store.states.map { it.toViewModel(dependencies.dateFormatProvider, dependencies.timeFormatProvider) } bindTo view
         }
     }

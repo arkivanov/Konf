@@ -15,10 +15,10 @@ import com.arkivanov.mvikotlin.core.utils.statekeeper.StateKeeperProvider
 import com.arkivanov.mvikotlin.core.utils.statekeeper.saveAndGet
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 
-class MainActivity : AppCompatActivity(), MainFragmentFactory.Dependencies {
+class MainActivity : AppCompatActivity() {
 
     private val nonConfigurationStateKeeperContainer = SimpleStateKeeperContainer()
-    private val fragmentFactory = MainFragmentFactory(this)
+    private val fragmentFactory by lazy { MainFragmentFactory(MainFragmentFactoryDependencies()) }
 
     private val router by lazy {
         MainFragmentRouter(
@@ -27,19 +27,6 @@ class MainActivity : AppCompatActivity(), MainFragmentFactory.Dependencies {
             contentId = android.R.id.content
         )
     }
-
-    override val storeFactory: StoreFactory = DefaultStoreFactory
-    override val database: KonfDatabase get() = app.database
-
-    @Suppress("UNCHECKED_CAST")
-    override val stateKeeperProvider: StateKeeperProvider<Any> =
-        nonConfigurationStateKeeperContainer.getProvider(
-            savedState = lastCustomNonConfigurationInstance as MutableMap<String, Any>?
-        )
-
-    override val dateFormatProvider: DateFormat.Provider by lazy { DateFormatProviderImpl(resources.configuration.getLocaleCompat()) }
-    override val timeFormatProvider: TimeFormat.Provider by lazy { TimeFormatProviderImpl(resources.configuration.getLocaleCompat()) }
-    override val onSessionSelected: (id: String) -> Unit = { router.openSessionDetails(it) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         supportFragmentManager.fragmentFactory = fragmentFactory
@@ -53,4 +40,19 @@ class MainActivity : AppCompatActivity(), MainFragmentFactory.Dependencies {
 
     override fun onRetainCustomNonConfigurationInstance(): Any? =
         nonConfigurationStateKeeperContainer.saveAndGet(HashMap())
+
+    private inner class MainFragmentFactoryDependencies : MainFragmentFactory.Dependencies {
+        override val storeFactory: StoreFactory = DefaultStoreFactory
+        override val database: KonfDatabase = app.database
+
+        @Suppress("UNCHECKED_CAST")
+        override val stateKeeperProvider: StateKeeperProvider<Any> =
+            nonConfigurationStateKeeperContainer.getProvider(
+                savedState = lastCustomNonConfigurationInstance as MutableMap<String, Any>?
+            )
+
+        override val dateFormatProvider: DateFormat.Provider = DateFormatProviderImpl(resources.configuration.getLocaleCompat())
+        override val timeFormatProvider: TimeFormat.Provider = TimeFormatProviderImpl(resources.configuration.getLocaleCompat())
+        override val onSessionSelected: (id: String) -> Unit = { router.openSessionDetails(it) }
+    }
 }

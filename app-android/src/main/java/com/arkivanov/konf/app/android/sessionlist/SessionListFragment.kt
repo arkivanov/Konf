@@ -18,30 +18,34 @@ class SessionListFragment(
     private val dependencies: Dependencies
 ) : Fragment(R.layout.session_list) {
 
-    private val syncComponent =
-        dependencies
-            .stateKeeperProvider
-            .retainInstance(lifecycle = lifecycle.asMviLifecycle(), factory = ::createSyncComponent)
+    private val mviLifecycle = lifecycle.asMviLifecycle()
 
-    private fun createSyncComponent(lifecycle: Lifecycle): SyncComponent =
+    private val syncComponent =
         SyncComponent(
             object : SyncComponent.Dependencies, Dependencies by dependencies {
-                override val lifecycle: Lifecycle = lifecycle
+                override val lifecycle: Lifecycle = mviLifecycle
             }
         )
 
     private val listComponent =
         dependencies
             .stateKeeperProvider
-            .retainInstance(lifecycle = lifecycle.asMviLifecycle(), factory = ::createListComponent)
+            .retainInstance(lifecycle = mviLifecycle, factory = ::createListComponent)
 
     private fun createListComponent(lifecycle: Lifecycle): SessionListComponent =
         SessionListComponent(
             object : SessionListComponent.Dependencies, Dependencies by dependencies {
                 override val lifecycle: Lifecycle = lifecycle
-                override val output: (SessionListComponent.Output) -> Unit = ::onSessionListComponentOutput
             }
         )
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val viewLifecycle = viewLifecycleOwner.lifecycle.asMviLifecycle()
+        syncComponent.onViewCreated(SyncViewImpl(root = view), viewLifecycle)
+        listComponent.onViewCreated(SessionListViewImpl(root = view), ::onSessionListComponentOutput, viewLifecycle)
+    }
 
     private fun onSessionListComponentOutput(output: SessionListComponent.Output) {
         when (output) {
@@ -50,14 +54,6 @@ class SessionListFragment(
 
             is SessionListComponent.Output.SessionSelected -> dependencies.onSessionSelected(output.id)
         }.let {}
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val viewLifecycle = viewLifecycleOwner.lifecycle.asMviLifecycle()
-        syncComponent.onViewCreated(SyncViewImpl(root = view), viewLifecycle)
-        listComponent.onViewCreated(SessionListViewImpl(root = view), viewLifecycle)
     }
 
     interface Dependencies {
