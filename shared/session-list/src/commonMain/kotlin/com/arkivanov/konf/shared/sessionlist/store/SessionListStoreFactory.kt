@@ -1,26 +1,22 @@
 package com.arkivanov.konf.shared.sessionlist.store
 
-import com.arkivanov.konf.database.EventEntity
-import com.arkivanov.konf.database.EventQueries
-import com.arkivanov.konf.database.SessionBundle
-import com.arkivanov.konf.database.SessionBundleQueries
-import com.arkivanov.konf.database.listenList
-import com.arkivanov.konf.database.listenOne
+import com.arkivanov.konf.shared.sessionlist.model.EventInfo
+import com.arkivanov.konf.shared.sessionlist.model.SessionInfo
 import com.arkivanov.konf.shared.sessionlist.store.SessionListStore.State
 import com.arkivanov.mvikotlin.core.store.Reducer
 import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
+import com.badoo.reaktive.annotations.EventsOnIoScheduler
+import com.badoo.reaktive.observable.Observable
 import com.badoo.reaktive.observable.combineLatest
-import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.observeOn
 import com.badoo.reaktive.scheduler.mainScheduler
 
 internal class SessionListStoreFactory(
     private val factory: StoreFactory,
-    private val eventQueries: EventQueries,
-    private val sessionBundleQueries: SessionBundleQueries
+    private val database: Database
 ) {
 
     fun create(): SessionListStore =
@@ -35,19 +31,34 @@ internal class SessionListStoreFactory(
 
     private companion object {
         private const val MILLIS_IN_DAY = 86400000L
+    }
 
-        private fun mapItems(event: EventEntity?, sessions: List<SessionBundle>): List<State.Item> {
-            val eventStartDate: Long? = event?.startDate?.truncateToDay()
-            val eventEndDate: Long? = event?.endDate?.truncateToDay()
+    private inner class ExecutorImpl : ReaktiveExecutor<Nothing, Unit, State, State.Data, Nothing>() {
+        override fun executeAction(action: Unit, getState: () -> State) {
+            val database = database
+
+            combineLatest(database.getEvent(), database.getSessions()) { event, sessions ->
+                State.Data(
+                    event = event,
+                    items = mapItems(event = event, sessions = sessions)
+                )
+            }
+                .observeOn(mainScheduler)
+                .subscribeScoped(isThreadLocal = true, onNext = ::dispatch)
+        }
+
+        private fun mapItems(event: EventInfo, sessions: List<SessionInfo>): List<State.Item> {
+            val eventStartDate: Long? = event.startDate?.truncateToDay()
+            val eventEndDate: Long? = event.endDate?.truncateToDay()
 
             return if ((eventStartDate == null) || (eventEndDate == null) || (eventEndDate <= eventStartDate)) {
                 sessions.map(State.Item::Session)
             } else {
-                val groups = sessions.groupBy { dayNumber(eventDate = eventStartDate, sessionDate = it.sessionStartDate?.truncateToDay()) }
+                val groups = sessions.groupBy { dayNumber(eventDate = eventStartDate, sessionDate = it.startDate?.truncateToDay()) }
                 val items = ArrayList<State.Item>()
                 groups.forEach { (dayNumber, sessionsOfDay) ->
                     items.add(State.Item.DaySeparator(number = dayNumber))
-                    val groupByStartDate = sessionsOfDay.groupBy(SessionBundle::sessionStartDate)
+                    val groupByStartDate = sessionsOfDay.groupBy(SessionInfo::startDate)
                     if (groupByStartDate.size > 1) {
                         groupByStartDate.values.forEach { sessionsOfStartDate ->
                             items.addAll(sessionsOfStartDate.map(State.Item::Session))
@@ -67,28 +78,16 @@ internal class SessionListStoreFactory(
         private fun Long.truncateToDay(): Long = (this / MILLIS_IN_DAY) * MILLIS_IN_DAY
     }
 
-    private sealed class Result {
-        data class Data(val data: State.Data?) : Result()
+    private object ReducerImpl : Reducer<State, State.Data> {
+        override fun State.reduce(result: State.Data): State =
+            copy(isLoading = false, data = result)
     }
 
-    private inner class ExecutorImpl : ReaktiveExecutor<Nothing, Unit, State, Result, Nothing>() {
-        override fun executeAction(action: Unit, getState: () -> State) {
-            combineLatest(eventQueries.get().listenOne(), sessionBundleQueries.getAll().listenList()) { event, sessions ->
-                State.Data(
-                    event = event,
-                    items = mapItems(event = event, sessions = sessions)
-                )
-            }
-                .map(Result::Data)
-                .observeOn(mainScheduler)
-                .subscribeScoped(isThreadLocal = true, onNext = ::dispatch)
-        }
-    }
+    interface Database {
+        @EventsOnIoScheduler
+        fun getEvent(): Observable<EventInfo>
 
-    private object ReducerImpl : Reducer<State, Result> {
-        override fun State.reduce(result: Result): State =
-            when (result) {
-                is Result.Data -> copy(isLoading = false, data = result.data)
-            }
+        @EventsOnIoScheduler
+        fun getSessions(): Observable<List<SessionInfo>>
     }
 }
