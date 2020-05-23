@@ -1,10 +1,6 @@
 package com.arkivanov.konf.shared.sessiondetails.store
 
-import com.arkivanov.konf.database.EventEntity
-import com.arkivanov.konf.database.EventQueries
-import com.arkivanov.konf.database.SessionBundle
-import com.arkivanov.konf.database.SessionBundleQueries
-import com.arkivanov.konf.database.listenOne
+import com.arkivanov.konf.shared.sessiondetails.model.SessionInfo
 import com.arkivanov.konf.shared.sessiondetails.store.SessionDetailsStore.Intent
 import com.arkivanov.konf.shared.sessiondetails.store.SessionDetailsStore.Label
 import com.arkivanov.konf.shared.sessiondetails.store.SessionDetailsStore.State
@@ -13,15 +9,15 @@ import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.reaktive.ReaktiveExecutor
-import com.badoo.reaktive.observable.combineLatest
+import com.badoo.reaktive.annotations.EventsOnIoScheduler
+import com.badoo.reaktive.observable.Observable
+import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.observeOn
 import com.badoo.reaktive.scheduler.mainScheduler
 
 internal class SessionDetailsStoreFactory(
-    private val sessionId: String,
     private val factory: StoreFactory,
-    private val eventQueries: EventQueries,
-    private val sessionBundleQueries: SessionBundleQueries
+    private val database: Database
 ) {
 
     fun create(): SessionDetailsStore =
@@ -34,9 +30,7 @@ internal class SessionDetailsStoreFactory(
         ) {
         }
 
-    private sealed class Result {
-        data class Data(val event: EventEntity?, val session: SessionBundle?) : Result()
-    }
+    private class Result(val session: SessionInfo?)
 
     private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
         override fun executeIntent(intent: Intent, getState: () -> State) {
@@ -52,11 +46,9 @@ internal class SessionDetailsStoreFactory(
         }
 
         override fun executeAction(action: Unit, getState: () -> State) {
-            combineLatest(
-                eventQueries.get().listenOne(),
-                sessionBundleQueries.getById(id = sessionId).listenOne(),
-                Result::Data
-            )
+            database
+                .getSession()
+                .map(::Result)
                 .observeOn(mainScheduler)
                 .subscribeScoped(isThreadLocal = true, onNext = ::dispatch)
         }
@@ -64,8 +56,11 @@ internal class SessionDetailsStoreFactory(
 
     private object ReducerImpl : Reducer<State, Result> {
         override fun State.reduce(result: Result): State =
-            when (result) {
-                is Result.Data -> copy(isLoading = false, event = result.event, session = result.session)
-            }
+            copy(isLoading = false, session = result.session)
+    }
+
+    interface Database {
+        @EventsOnIoScheduler
+        fun getSession(): Observable<SessionInfo?>
     }
 }

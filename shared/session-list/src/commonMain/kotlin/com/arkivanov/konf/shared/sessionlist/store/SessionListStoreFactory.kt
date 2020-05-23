@@ -35,8 +35,6 @@ internal class SessionListStoreFactory(
 
     private inner class ExecutorImpl : ReaktiveExecutor<Nothing, Unit, State, State.Data, Nothing>() {
         override fun executeAction(action: Unit, getState: () -> State) {
-            val database = database
-
             combineLatest(database.getEvent(), database.getSessions()) { event, sessions ->
                 State.Data(
                     event = event,

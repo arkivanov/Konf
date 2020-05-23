@@ -3,7 +3,10 @@ package com.arkivanov.konf.shared.sessiondetails.integration
 import com.arkivanov.konf.shared.sessiondetails.SessionDetailsComponent
 import com.arkivanov.konf.shared.sessiondetails.SessionDetailsComponent.Dependencies
 import com.arkivanov.konf.shared.sessiondetails.SessionDetailsView
-import com.arkivanov.konf.shared.sessiondetails.store.SessionDetailsStore
+import com.arkivanov.konf.shared.sessiondetails.integration.mappers.eventToIntent
+import com.arkivanov.konf.shared.sessiondetails.integration.mappers.eventToOutput
+import com.arkivanov.konf.shared.sessiondetails.integration.mappers.labelToOutput
+import com.arkivanov.konf.shared.sessiondetails.integration.mappers.stateToModel
 import com.arkivanov.konf.shared.sessiondetails.store.SessionDetailsStoreFactory
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
@@ -21,10 +24,12 @@ internal class SessionDetailsComponentImpl(
 
     private val store =
         SessionDetailsStoreFactory(
-            sessionId = dependencies.sessionId,
             factory = dependencies.storeFactory,
-            eventQueries = dependencies.database.eventQueries,
-            sessionBundleQueries = dependencies.database.sessionBundleQueries
+            database = SessionDetailsStoreDatabase(
+                sessionId = dependencies.sessionId,
+                eventQueries = dependencies.database.eventQueries,
+                sessionBundleQueries = dependencies.database.sessionBundleQueries
+            )
         ).create()
 
     init {
@@ -33,13 +38,13 @@ internal class SessionDetailsComponentImpl(
 
     override fun onViewCreated(view: SessionDetailsView, viewLifecycle: Lifecycle) {
         bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
-            view.events.mapNotNull(SessionDetailsView.Event::toIntent) bindTo store
+            view.events.mapNotNull(eventToIntent) bindTo store
         }
 
         bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
-            store.labels.mapNotNull(SessionDetailsStore.Label::toOutput) bindTo dependencies.detailsOutput
-            view.events.mapNotNull(SessionDetailsView.Event::toOutput) bindTo dependencies.detailsOutput
-            store.states.map { it.toViewModel(dependencies.dateFormatProvider, dependencies.timeFormatProvider) } bindTo view
+            store.labels.mapNotNull(labelToOutput) bindTo dependencies.detailsOutput
+            view.events.mapNotNull(eventToOutput) bindTo dependencies.detailsOutput
+            store.states.map(stateToModel(dependencies.dateFormatProvider, dependencies.timeFormatProvider)) bindTo view
         }
     }
 }
