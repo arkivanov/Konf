@@ -12,11 +12,9 @@ import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.events
 import com.arkivanov.mvikotlin.extensions.reaktive.labels
 import com.arkivanov.mvikotlin.extensions.reaktive.states
-import com.badoo.reaktive.annotations.ExperimentalReaktiveApi
 import com.badoo.reaktive.observable.map
 import com.badoo.reaktive.observable.mapNotNull
 
-@UseExperimental(ExperimentalReaktiveApi::class)
 internal class SessionDetailsComponentImpl(
     private val dependencies: Dependencies
 ) : SessionDetailsComponent {
@@ -33,14 +31,14 @@ internal class SessionDetailsComponentImpl(
         dependencies.lifecycle.doOnDestroy(store::dispose)
     }
 
-    override fun onViewCreated(view: SessionDetailsView, output: (SessionDetailsComponent.Output) -> Unit, viewLifecycle: Lifecycle) {
+    override fun onViewCreated(view: SessionDetailsView, viewLifecycle: Lifecycle) {
         bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
             view.events.mapNotNull(SessionDetailsView.Event::toIntent) bindTo store
         }
 
         bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
-            store.labels.mapNotNull(SessionDetailsStore.Label::toOutput) bindTo output
-            view.events.mapNotNull(SessionDetailsView.Event::toOutput) bindTo output
+            store.labels.mapNotNull(SessionDetailsStore.Label::toOutput) bindTo dependencies.detailsOutput
+            view.events.mapNotNull(SessionDetailsView.Event::toOutput) bindTo dependencies.detailsOutput
             store.states.map { it.toViewModel(dependencies.dateFormatProvider, dependencies.timeFormatProvider) } bindTo view
         }
     }

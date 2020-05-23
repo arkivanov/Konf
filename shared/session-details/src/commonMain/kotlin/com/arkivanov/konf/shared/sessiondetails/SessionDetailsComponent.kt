@@ -8,7 +8,7 @@ import com.arkivanov.mvikotlin.core.store.StoreFactory
 
 interface SessionDetailsComponent {
 
-    fun onViewCreated(view: SessionDetailsView, output: (Output) -> Unit, viewLifecycle: Lifecycle)
+    fun onViewCreated(view: SessionDetailsView, viewLifecycle: Lifecycle)
 
     interface Dependencies {
         val sessionId: String
@@ -17,6 +17,7 @@ interface SessionDetailsComponent {
         val lifecycle: Lifecycle
         val dateFormatProvider: DateFormat.Provider
         val timeFormatProvider: TimeFormat.Provider
+        val detailsOutput: (Output) -> Unit
     }
 
     sealed class Output {

@@ -36,10 +36,7 @@ class SessionDetailsFragment(
         super.onViewCreated(view, savedInstanceState)
 
         val viewLifecycle = viewLifecycleOwner.lifecycle.asMviLifecycle()
-        sessionDetailsComponent.onViewCreated(SessionDetailsViewImpl(root = view), ::onSessionDetailsComponentOutput, viewLifecycle)
-    }
-
-    private fun onSessionDetailsComponentOutput(output: SessionDetailsComponent.Output) {
+        sessionDetailsComponent.onViewCreated(SessionDetailsViewImpl(root = view), viewLifecycle)
     }
 
     private companion object {
@@ -51,5 +48,6 @@ class SessionDetailsFragment(
         val database: KonfDatabase
         val dateFormatProvider: DateFormat.Provider
         val timeFormatProvider: TimeFormat.Provider
+        val detailsOutput: (SessionDetailsComponent.Output) -> Unit
     }
 }

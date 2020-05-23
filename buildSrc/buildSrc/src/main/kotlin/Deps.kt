@@ -98,7 +98,7 @@ object Deps {
 
     object ArkIvanov {
         object MviKotlin : Group(name = "com.arkivanov.mvikotlin") {
-            private const val version = "2.0.0-beta3"
+            private const val version = "2.0.0-beta5"
 
             object MviKotlin : Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin", version = version)
             object MviKotlinMain : Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin-main", version = version)
