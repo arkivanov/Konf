@@ -1,4 +1,4 @@
-package com.arkivanov.konf.shared.sync.integration
+package com.arkivanov.konf.shared.sync.integration.mappings
 
 import com.arkivanov.konf.database.CompanyEntity
 import com.arkivanov.konf.database.EventEntity
@@ -10,41 +10,42 @@ import com.arkivanov.konf.shared.sync.store.SyncData
 import kotlinx.serialization.json.JsonObject
 
 /*
- * By default generates random data, customize with your own data
+ * By default generates random data, customize with your own mapping
  */
-internal fun JsonObject.toSyncData(): SyncData {
-    val sessions = ObjectGenerator<SessionEntity>()
-    val speakers = ObjectGenerator<SpeakerEntity>()
-    val companies = ObjectGenerator<CompanyEntity>()
-    val rooms = ObjectGenerator<RoomEntity>()
+internal val jsonObjectToSyncData: JsonObject.() -> SyncData =
+    {
+        val sessions = ObjectGenerator<SessionEntity>()
+        val speakers = ObjectGenerator<SpeakerEntity>()
+        val companies = ObjectGenerator<CompanyEntity>()
+        val rooms = ObjectGenerator<RoomEntity>()
 
-    repeat(ROOM_COUNT) { rooms.generate(::room) }
+        repeat(ROOM_COUNT) { rooms.generate(::room) }
 
-    repeat(SESSION_COUNT) {
-        sessions.generate {
-            session(index = it, speakers = speakers, companies = companies, rooms = rooms)
+        repeat(SESSION_COUNT) {
+            sessions.generate {
+                session(index = it, speakers = speakers, companies = companies, rooms = rooms)
+            }
         }
-    }
 
-    return SyncData(
-        event = EventEntity.Impl(
-            title = "Awesome Conference",
-            description = "My awesome conference with logs of interesting sessions",
-            imageUrl = IMAGE_URL,
-            startDate = EVENT_START_DATE,
-            endDate = EVENT_START_DATE + (EVENT_DAY_COUNT - 1).toLong() * DAY_IN_MILLIS,
-            timeZone = EVENT_TIME_ZONE,
-            locationLatitude = 30.0,
-            locationLongitude = 50.0,
-            locationDescription = "Some location",
-            websiteUrl = "https://github.com/arkivanov/Konf"
-        ),
-        companies = companies.list,
-        speakers = speakers.list,
-        rooms = rooms.list,
-        sessions = sessions.list
-    )
-}
+        SyncData(
+            event = EventEntity.Impl(
+                title = "Awesome Conference",
+                description = "My awesome conference with logs of interesting sessions",
+                imageUrl = IMAGE_URL,
+                startDate = EVENT_START_DATE,
+                endDate = EVENT_START_DATE + (EVENT_DAY_COUNT - 1).toLong() * DAY_IN_MILLIS,
+                timeZone = EVENT_TIME_ZONE,
+                locationLatitude = 30.0,
+                locationLongitude = 50.0,
+                locationDescription = "Some location",
+                websiteUrl = "https://github.com/arkivanov/Konf"
+            ),
+            companies = companies.list,
+            speakers = speakers.list,
+            rooms = rooms.list,
+            sessions = sessions.list
+        )
+    }
 
 private const val EVENT_START_DATE = 1626220800000L // 14/07/2021
 private const val EVENT_DAY_COUNT = 2
