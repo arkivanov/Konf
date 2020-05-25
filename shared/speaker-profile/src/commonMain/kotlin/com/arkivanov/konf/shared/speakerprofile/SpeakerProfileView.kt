@@ -1,7 +1,7 @@
-package com.arkivanov.konf.shared.speakerdetails
+package com.arkivanov.konf.shared.speakerprofile
 
-import com.arkivanov.konf.shared.speakerdetails.SpeakerProfileView.Event
-import com.arkivanov.konf.shared.speakerdetails.SpeakerProfileView.Model
+import com.arkivanov.konf.shared.speakerprofile.SpeakerProfileView.Event
+import com.arkivanov.konf.shared.speakerprofile.SpeakerProfileView.Model
 import com.arkivanov.mvikotlin.core.view.MviView
 
 interface SpeakerProfileView : MviView<Model, Event> {
@@ -11,6 +11,7 @@ interface SpeakerProfileView : MviView<Model, Event> {
         val isError: Boolean,
         val name: String?,
         val imageUrl: String?,
+        val job: String?,
         val location: String?,
         val biography: String?,
         val twitterAccount: String?,

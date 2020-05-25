@@ -1,7 +1,7 @@
-package com.arkivanov.konf.shared.speakerdetails.store
+package com.arkivanov.konf.shared.speakerprofile.store
 
-import com.arkivanov.konf.database.SpeakerBundle
-import com.arkivanov.konf.shared.speakerdetails.store.SpeakerProfileStore.State
+import com.arkivanov.konf.shared.speakerprofile.model.SpeakerInfo
+import com.arkivanov.konf.shared.speakerprofile.store.SpeakerProfileStore.State
 import com.arkivanov.mvikotlin.core.store.Store
 import com.badoo.reaktive.disposable.Disposable
 
@@ -9,6 +9,6 @@ internal interface SpeakerProfileStore : Store<Nothing, State, Nothing>, Disposa
 
     data class State(
         val isLoading: Boolean = false,
-        val speaker: SpeakerBundle? = null
+        val speaker: SpeakerInfo? = null
     )
 }
