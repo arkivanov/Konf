@@ -6,6 +6,8 @@
         <item name="colorPrimaryDark">#00574B</item>
         <item name="colorAccent">#D81B60</item>
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
+        <item name="themeOverlayDark">@style/ThemeOverlay.MaterialComponents.Dark</item>
+        <item name="textAppearanceCollapsingToolbarExpanded">@style/TextAppearance.AppTheme.CollapsingToolbar.Expanded</item>
         <item name="icAvatarPlaceholder">@drawable/ic_avatar_placeholder</item>
         <item name="icArrowBack">@drawable/ic_arrow_back</item>
     </style>

@@ -79,7 +79,7 @@ private fun session(
         speakerId = speakers.generate { speaker(index = it, companies = companies) }.id,
         roomId = rooms.list.random().id,
         title = sentence(wordRange = 2..6, capitalizeWords = true),
-        description = sentences(sentenceRange = 3..10, wordRange = 3..10),
+        description = sentences(sentenceRange = 5..30, wordRange = 3..10),
         imageUrl = IMAGE_URL,
         startDate = getRandomDateTimeDuringEvent(index = index),
         endDate = getRandomDateTimeDuringEvent(index = index) + 40L * 60L * 1000L,
