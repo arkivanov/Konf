@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <attr name="avatarPlaceholder" format="reference" />
+    <attr name="icAvatarPlaceholder" format="reference" />
+    <attr name="icArrowBack" format="reference" />
 </resources>

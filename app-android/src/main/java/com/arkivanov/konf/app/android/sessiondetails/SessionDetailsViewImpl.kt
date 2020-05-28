@@ -13,9 +13,11 @@ import com.arkivanov.konf.shared.sessiondetails.SessionDetailsView.Model
 import com.arkivanov.mvikotlin.core.utils.diff
 import com.arkivanov.mvikotlin.core.view.BaseMviView
 import com.arkivanov.mvikotlin.core.view.ViewRenderer
+import com.google.android.material.appbar.MaterialToolbar
 
 class SessionDetailsViewImpl(root: View) : BaseMviView<Model, Event>(), SessionDetailsView {
 
+    private val toolbar = root.requireViewWithId<MaterialToolbar>(R.id.toolbar)
     private val imageView = root.requireViewWithId<ImageView>(R.id.image)
     private val titleTextView = root.requireViewWithId<TextView>(R.id.text_title)
     private val descriptionTextView = root.requireViewWithId<TextView>(R.id.text_description)
@@ -25,12 +27,14 @@ class SessionDetailsViewImpl(root: View) : BaseMviView<Model, Event>(), SessionD
     private val infoTextView = root.requireViewWithId<TextView>(R.id.text_info)
 
     init {
+        toolbar.setNavigationOnClickListener { dispatch(Event.CloseClicked) }
         speakerAvatarImageView.clipToCircle()
         root.requireViewWithId<View>(R.id.layout_speaker).setOnClickListener { dispatch(Event.SpeakerClicked) }
     }
 
     override val renderer: ViewRenderer<Model>? =
         diff {
+            diff(get = Model::title, set = toolbar::setTitle)
             diff(get = Model::title, set = titleTextView::setText)
             diff(get = Model::description, set = descriptionTextView::setText)
             diff(get = Model::imageUrl, set = imageView::loadImage)
@@ -39,7 +43,7 @@ class SessionDetailsViewImpl(root: View) : BaseMviView<Model, Event>(), SessionD
             diff(get = Model::speakerJobInfo, set = speakerJobTextView::setText)
 
             diff(get = Model::speakerAvatarUrl) {
-                speakerAvatarImageView.loadImage(url = it, placeholderAttrId = R.attr.avatarPlaceholder)
+                speakerAvatarImageView.loadImage(url = it, placeholderAttrId = R.attr.icAvatarPlaceholder)
             }
         }
 }
