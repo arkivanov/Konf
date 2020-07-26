@@ -2,8 +2,8 @@ package com.arkivanov.konf.shared.sessionlist
 
 import com.arkivanov.konf.database.KonfDatabase
 import com.arkivanov.konf.shared.common.timeformat.TimeFormat
+import com.arkivanov.mvikotlin.core.instancekeeper.InstanceKeeperProvider
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.statekeeper.StateKeeperProvider
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 
 interface SessionListComponent {
@@ -15,7 +15,7 @@ interface SessionListComponent {
         val database: KonfDatabase
         val lifecycle: Lifecycle
         val timeFormatProvider: TimeFormat.Provider
-        val stateKeeperProvider: StateKeeperProvider<Any>?
+        val instanceKeeperProvider: InstanceKeeperProvider
         val listOutput: (Output) -> Unit
     }
 

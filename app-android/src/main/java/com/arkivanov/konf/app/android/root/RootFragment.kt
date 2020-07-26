@@ -72,7 +72,6 @@ class RootFragment(
     interface Dependencies {
         val storeFactory: StoreFactory
         val database: KonfDatabase
-        val stateKeeperProvider: StateKeeperProvider<Any>
         val dateFormatProvider: DateFormat.Provider
         val timeFormatProvider: TimeFormat.Provider
         val rootOutput: (Output) -> Unit

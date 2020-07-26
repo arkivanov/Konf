@@ -13,15 +13,10 @@ import com.arkivanov.konf.shared.common.dateformat.DateFormat
 import com.arkivanov.konf.shared.common.dateformat.DateFormatProviderImpl
 import com.arkivanov.konf.shared.common.timeformat.TimeFormat
 import com.arkivanov.konf.shared.common.timeformat.TimeFormatProviderImpl
-import com.arkivanov.mvikotlin.core.statekeeper.SimpleStateKeeperContainer
-import com.arkivanov.mvikotlin.core.statekeeper.StateKeeperProvider
-import com.arkivanov.mvikotlin.core.statekeeper.saveAndGet
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 
 class MainActivity : AppCompatActivity() {
-
-    private val nonConfigurationStateKeeperContainer = SimpleStateKeeperContainer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val fragmentFactory = FragmentFactoryImpl()
@@ -35,9 +30,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-    override fun onRetainCustomNonConfigurationInstance(): Any? =
-        nonConfigurationStateKeeperContainer.saveAndGet(HashMap())
 
     override fun onBackPressed() {
         supportFragmentManager
@@ -69,13 +61,6 @@ class MainActivity : AppCompatActivity() {
                 object : RootFragment.Dependencies {
                     override val storeFactory: StoreFactory get() = DefaultStoreFactory
                     override val database: KonfDatabase get() = app.database
-
-                    @Suppress("UNCHECKED_CAST")
-                    override val stateKeeperProvider: StateKeeperProvider<Any> =
-                        nonConfigurationStateKeeperContainer.getProvider(
-                            savedState = lastCustomNonConfigurationInstance as MutableMap<String, Any>?
-                        )
-
                     override val dateFormatProvider: DateFormat.Provider = DateFormatProviderImpl(resources.configuration.getLocaleCompat())
                     override val timeFormatProvider: TimeFormat.Provider = TimeFormatProviderImpl(resources.configuration.getLocaleCompat())
                     override val rootOutput: (RootFragment.Output) -> Unit = ::rootOutput

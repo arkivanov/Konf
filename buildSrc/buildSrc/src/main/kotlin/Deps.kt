@@ -98,7 +98,7 @@ object Deps {
 
     object ArkIvanov {
         object MviKotlin : Group(name = "com.arkivanov.mvikotlin") {
-            private const val version = "2.0.0-beta5"
+            private const val version = "2.0.0-rc2"
 
             object MviKotlin : Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin", version = version)
             object MviKotlinMain : Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin-main", version = version)
@@ -106,8 +106,8 @@ object Deps {
             object MviKotlinExtensionsReaktive :
                 Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin-extensions-reaktive", version = version)
 
-            object AndroidxLifecycleInterop :
-                Dependency(group = ArkIvanov.MviKotlin, name = "androidx-lifecycle-interop", version = version)
+            object MviKotlinExtensionsAndroidX :
+                Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin-extensions-androidx", version = version)
         }
     }
 

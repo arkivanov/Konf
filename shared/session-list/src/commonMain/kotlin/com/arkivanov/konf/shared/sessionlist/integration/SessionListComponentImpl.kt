@@ -5,10 +5,12 @@ import com.arkivanov.konf.shared.sessionlist.SessionListComponent.Dependencies
 import com.arkivanov.konf.shared.sessionlist.SessionListView
 import com.arkivanov.konf.shared.sessionlist.integration.mappers.eventToOutput
 import com.arkivanov.konf.shared.sessionlist.integration.mappers.stateToModel
+import com.arkivanov.konf.shared.sessionlist.store.SessionListStore
 import com.arkivanov.konf.shared.sessionlist.store.SessionListStoreFactory
 import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
+import com.arkivanov.mvikotlin.core.instancekeeper.get
+import com.arkivanov.mvikotlin.core.instancekeeper.getOrCreateStore
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.statekeeper.retainStore
 import com.arkivanov.mvikotlin.extensions.reaktive.bind
 import com.arkivanov.mvikotlin.extensions.reaktive.events
 import com.arkivanov.mvikotlin.extensions.reaktive.states
@@ -20,7 +22,7 @@ internal class SessionListComponentImpl(
 ) : SessionListComponent {
 
     private val store =
-        dependencies.stateKeeperProvider.retainStore(dependencies.lifecycle) {
+        dependencies.instanceKeeperProvider.get<SessionListStore>().getOrCreateStore {
             SessionListStoreFactory(
                 factory = dependencies.storeFactory,
                 database = SessionListStoreDatabase(dependencies.database.eventQueries, dependencies.database.sessionBundleQueries)

@@ -8,30 +8,38 @@ import com.arkivanov.konf.database.KonfDatabase
 import com.arkivanov.konf.shared.common.timeformat.TimeFormat
 import com.arkivanov.konf.shared.sessionlist.SessionListComponent
 import com.arkivanov.konf.shared.sync.SyncComponent
-import com.arkivanov.mvikotlin.androidxlifecycleinterop.asMviLifecycle
+import com.arkivanov.mvikotlin.core.instancekeeper.InstanceKeeperProvider
 import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.statekeeper.StateKeeperProvider
 import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.extensions.androidx.instancekeeper.getInstanceKeeperProvider
+import com.arkivanov.mvikotlin.extensions.androidx.lifecycle.asMviLifecycle
 
 class SessionListFragment(
     private val dependencies: Dependencies
 ) : Fragment(R.layout.session_list) {
 
     private val mviLifecycle = lifecycle.asMviLifecycle()
+    private lateinit var syncComponent: SyncComponent
+    private lateinit var listComponent: SessionListComponent
 
-    private val syncComponent =
-        SyncComponent(
-            object : SyncComponent.Dependencies, Dependencies by dependencies {
-                override val lifecycle: Lifecycle = mviLifecycle
-            }
-        )
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    private val listComponent =
-        SessionListComponent(
-            object : SessionListComponent.Dependencies, Dependencies by dependencies {
-                override val lifecycle: Lifecycle = mviLifecycle
-            }
-        )
+        syncComponent =
+            SyncComponent(
+                object : SyncComponent.Dependencies, Dependencies by dependencies {
+                    override val lifecycle: Lifecycle = mviLifecycle
+                }
+            )
+
+        listComponent =
+            SessionListComponent(
+                object : SessionListComponent.Dependencies, Dependencies by dependencies {
+                    override val lifecycle: Lifecycle = mviLifecycle
+                    override val instanceKeeperProvider: InstanceKeeperProvider = getInstanceKeeperProvider()
+                }
+            )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,7 +52,6 @@ class SessionListFragment(
     interface Dependencies {
         val storeFactory: StoreFactory
         val database: KonfDatabase
-        val stateKeeperProvider: StateKeeperProvider<Any>?
         val timeFormatProvider: TimeFormat.Provider
         val listOutput: (SessionListComponent.Output) -> Unit
     }
