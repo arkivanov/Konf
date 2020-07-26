@@ -16,7 +16,13 @@ interface SessionDetailsView : MviView<Model, Event> {
         val info: String?,
         val speakerName: String?,
         val speakerAvatarUrl: String?,
-        val speakerJobInfo: String?
+        val speakerJobInfo: String?,
+        val speakerBiography: String?,
+        val speakerTwitterAccount: String?,
+        val speakerGitHubAccount: String?,
+        val speakerFacebookAccount: String?,
+        val speakerLinkedInAccount: String?,
+        val speakerMediumAccount: String?
     ) {
         enum class Level {
             BEGINNER, INTERMEDIATE, ADVANCED, EXPERT
@@ -25,6 +31,5 @@ interface SessionDetailsView : MviView<Model, Event> {
 
     sealed class Event {
         object CloseClicked : Event()
-        object SpeakerClicked : Event()
     }
 }

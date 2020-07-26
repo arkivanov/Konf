@@ -22,6 +22,5 @@ interface SessionDetailsComponent {
 
     sealed class Output {
         object Finished : Output()
-        data class SpeakerSelected(val id: String) : Output()
     }
 }

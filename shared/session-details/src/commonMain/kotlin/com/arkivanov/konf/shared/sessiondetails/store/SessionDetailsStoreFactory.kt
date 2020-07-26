@@ -33,18 +33,6 @@ internal class SessionDetailsStoreFactory(
     private class Result(val session: SessionInfo?)
 
     private inner class ExecutorImpl : ReaktiveExecutor<Intent, Unit, State, Result, Label>() {
-        override fun executeIntent(intent: Intent, getState: () -> State) {
-            when (intent) {
-                is Intent.SelectSpeaker -> selectSpeaker(getState())
-            }.let {}
-        }
-
-        private fun selectSpeaker(state: State) {
-            state.session?.speakerId?.also {
-                publish(Label.SpeakerSelected(id = it))
-            }
-        }
-
         override fun executeAction(action: Unit, getState: () -> State) {
             database
                 .getSession()

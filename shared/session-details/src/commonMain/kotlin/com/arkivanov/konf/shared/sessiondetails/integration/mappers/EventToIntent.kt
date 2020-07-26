@@ -7,6 +7,5 @@ internal val eventToIntent: Event.() -> Intent? =
     {
         when (this) {
             is Event.CloseClicked -> null
-            is Event.SpeakerClicked -> Intent.SelectSpeaker
         }
     }

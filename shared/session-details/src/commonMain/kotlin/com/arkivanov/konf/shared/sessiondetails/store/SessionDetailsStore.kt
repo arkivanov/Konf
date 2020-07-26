@@ -9,16 +9,12 @@ import com.badoo.reaktive.disposable.Disposable
 
 internal interface SessionDetailsStore : Store<Intent, State, Label>, Disposable {
 
-    sealed class Intent {
-        object SelectSpeaker : Intent()
-    }
+    sealed class Intent
 
     data class State(
         val isLoading: Boolean = false,
         val session: SessionInfo? = null
     )
 
-    sealed class Label {
-        data class SpeakerSelected(val id: String) : Label()
-    }
+    sealed class Label
 }

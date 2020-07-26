@@ -53,7 +53,6 @@ class RootFragment(
     private fun detailsOutput(output: SessionDetailsComponent.Output) {
         when (output) {
             is SessionDetailsComponent.Output.Finished -> childFragmentManager.popBackStack()
-            is SessionDetailsComponent.Output.SpeakerSelected -> Unit // TODO: Implement later
         }.let {}
     }
 

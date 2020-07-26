@@ -7,6 +7,5 @@ internal val eventToOutput: Event.() -> Output? =
     {
         when (this) {
             is Event.CloseClicked -> Output.Finished
-            is Event.SpeakerClicked -> null
         }
     }

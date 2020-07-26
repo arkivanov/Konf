@@ -102,8 +102,6 @@
                 android:id="@+id/layout_speaker"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="?selectableItemBackground"
                 android:padding="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -143,6 +141,102 @@
                     app:layout_constraintTop_toBottomOf="@+id/text_speaker_name"
                     tools:text="Android Developer @ Badoo" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:id="@+id/text_speaker_biography"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:justificationMode="inter_word"
+                android:lineSpacingMultiplier="1.1"
+                android:textAppearance="?textAppearanceBody1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/layout_speaker"
+                tools:targetApi="o"
+                tools:text="Speaker biography" />
+
+            <ImageButton
+                android:id="@+id/button_twitter"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@null"
+                android:drawableStart="?icTwitter"
+                android:drawablePadding="8dp"
+                android:gravity="start"
+                android:src="?icTwitter"
+                android:textAppearance="?textAppearanceBody1"
+                app:layout_constraintEnd_toStartOf="@+id/button_github"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_speaker_biography" />
+
+            <ImageButton
+                android:id="@+id/button_github"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@null"
+                android:drawableStart="?icTwitter"
+                android:drawablePadding="8dp"
+                android:gravity="start"
+                android:src="?icGitHub"
+                android:textAppearance="?textAppearanceBody1"
+                app:layout_constraintEnd_toStartOf="@+id/button_facebook"
+                app:layout_constraintStart_toEndOf="@+id/button_twitter"
+                app:layout_constraintTop_toBottomOf="@+id/text_speaker_biography" />
+
+            <ImageButton
+                android:id="@+id/button_facebook"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@null"
+                android:drawableStart="?icTwitter"
+                android:drawablePadding="8dp"
+                android:gravity="start"
+                android:src="?icFacebook"
+                android:textAppearance="?textAppearanceBody1"
+                app:layout_constraintEnd_toStartOf="@+id/button_linkedin"
+                app:layout_constraintStart_toEndOf="@+id/button_github"
+                app:layout_constraintTop_toBottomOf="@+id/text_speaker_biography" />
+
+            <ImageButton
+                android:id="@+id/button_linkedin"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@null"
+                android:drawableStart="?icTwitter"
+                android:drawablePadding="8dp"
+                android:gravity="start"
+                android:src="?icLinkedIn"
+                android:textAppearance="?textAppearanceBody1"
+                app:layout_constraintEnd_toStartOf="@+id/button_medium"
+                app:layout_constraintStart_toEndOf="@+id/button_facebook"
+                app:layout_constraintTop_toBottomOf="@+id/text_speaker_biography" />
+
+            <ImageButton
+                android:id="@+id/button_medium"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@null"
+                android:drawableStart="?icTwitter"
+                android:drawablePadding="8dp"
+                android:gravity="start"
+                android:src="?icMedium"
+                android:textAppearance="?textAppearanceBody1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/button_linkedin"
+                app:layout_constraintTop_toBottomOf="@+id/text_speaker_biography" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

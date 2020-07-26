@@ -10,5 +10,10 @@
         <item name="textAppearanceCollapsingToolbarExpanded">@style/TextAppearance.AppTheme.CollapsingToolbar.Expanded</item>
         <item name="icAvatarPlaceholder">@drawable/ic_avatar_placeholder</item>
         <item name="icArrowBack">@drawable/ic_arrow_back</item>
+        <item name="icTwitter">@drawable/ic_twitter</item>
+        <item name="icGitHub">@drawable/ic_github</item>
+        <item name="icFacebook">@drawable/ic_facebook</item>
+        <item name="icLinkedIn">@drawable/ic_linkedin</item>
+        <item name="icMedium">@drawable/ic_medium</item>
     </style>
 </resources>

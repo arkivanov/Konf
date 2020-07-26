@@ -34,11 +34,16 @@ internal class SessionDetailsStoreDatabase(
             startDate = session.sessionStartDate,
             endDate = session.sessionEndDate,
             roomName = session.roomName,
-            speakerId = session.speakerId,
             speakerName = session.speakerName,
             speakerAvatarUrl = session.speakerAvatarUrl,
             speakerJob = session.speakerJob,
             speakerCompanyName = session.speakerCompanyName,
+            speakerBiography = session.speakerBiography,
+            speakerTwitterAccount = session.speakerTwitterAccount,
+            speakerGitHubAccount = session.speakerGithubAccount,
+            speakerFacebookAccount = session.speakerFacebookAccount,
+            speakerLinkedInAccount = session.speakerLinkedInAccount,
+            speakerMediumAccount = session.speakerMediumAccount,
             eventTimeZone = event.timeZone
         )
 }

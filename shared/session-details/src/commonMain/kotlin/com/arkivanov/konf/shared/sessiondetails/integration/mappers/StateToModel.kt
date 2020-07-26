@@ -25,7 +25,13 @@ internal fun stateToModel(dateFormatProvider: DateFormat.Provider, timeFormatPro
             info = formatSessionInfo(session, dateFormatProvider, timeFormatProvider),
             speakerName = session?.speakerName,
             speakerAvatarUrl = session?.speakerAvatarUrl,
-            speakerJobInfo = session?.formatSpeakerInfo()
+            speakerJobInfo = session?.formatSpeakerInfo(),
+            speakerBiography = session?.speakerBiography,
+            speakerTwitterAccount = session?.speakerTwitterAccount?.let { "https://twitter.com/$it" },
+            speakerGitHubAccount = session?.speakerGitHubAccount?.let { "https://github.com/$it" },
+            speakerFacebookAccount = session?.speakerFacebookAccount?.let { "https://facebook.com/$it" },
+            speakerLinkedInAccount = session?.speakerLinkedInAccount?.let { "https://linkedin.com/in/$it" },
+            speakerMediumAccount = session?.speakerMediumAccount?.let { "https://medium.com/@$it" }
         )
     }
 
@@ -42,8 +48,8 @@ private fun formatSessionInfo(
     val timeFormat = timeFormatProvider.get(timeZone = session.eventTimeZone ?: "UTC")
 
     return "${session.startDate?.let(dateFormat::format)}, " +
-        "${session.startDate?.let(timeFormat::format)}-${session.endDate?.let(timeFormat::format)}, " +
-        "${session.roomName}"
+            "${session.startDate?.let(timeFormat::format)}-${session.endDate?.let(timeFormat::format)}, " +
+            "${session.roomName}"
 }
 
 private fun SessionInfo.formatSpeakerInfo(): String = "$speakerJob @ $speakerCompanyName"

@@ -8,6 +8,7 @@ import com.arkivanov.konf.database.SessionLevel
 import com.arkivanov.konf.database.SpeakerEntity
 import com.arkivanov.konf.shared.sync.store.SyncData
 import kotlinx.serialization.json.JsonObject
+import kotlin.random.Random
 
 /*
  * By default generates random data, customize with your own mapping
@@ -91,16 +92,16 @@ private fun speaker(index: Int, companies: ObjectGenerator<CompanyEntity>): Spea
         id = getId(index),
         companyId = companies.generate(::company).id,
         name = sentence(wordRange = 2..3, capitalizeWords = true),
-        avatarUrl = null,
+        avatarUrl = IMAGE_URL.takeIf { Random.nextBoolean() },
         imageUrl = IMAGE_URL,
         job = sentence(wordRange = 1..3, capitalizeWords = true),
         location = sentence(wordRange = 1..2, capitalizeWords = true),
         biography = sentences(sentenceRange = 1..5, wordRange = 3..8),
-        twitterAccount = "@${word()}",
-        githubAccount = "@${word()}",
-        facebookAccount = "@${word()}",
-        linkedInAccount = "@${word()}",
-        mediumAccount = "@${word()}"
+        twitterAccount = word(),
+        githubAccount = word(),
+        facebookAccount = word(),
+        linkedInAccount = word(),
+        mediumAccount = word()
     )
 
 private fun company(index: Int): CompanyEntity =

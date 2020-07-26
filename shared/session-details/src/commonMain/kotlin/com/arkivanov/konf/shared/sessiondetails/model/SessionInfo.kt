@@ -10,10 +10,15 @@ internal data class SessionInfo(
     val startDate: Long?,
     val endDate: Long?,
     val roomName: String?,
-    val speakerId: String?,
     val speakerName: String?,
     val speakerAvatarUrl: String?,
     val speakerJob: String?,
     val speakerCompanyName: String?,
-    val eventTimeZone: String?
+    val eventTimeZone: String?,
+    val speakerBiography: String?,
+    val speakerTwitterAccount: String?,
+    val speakerGitHubAccount: String?,
+    val speakerFacebookAccount: String?,
+    val speakerLinkedInAccount: String?,
+    val speakerMediumAccount: String?
 )
