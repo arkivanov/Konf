@@ -29,7 +29,7 @@ internal val jsonObjectToSyncData: JsonObject.() -> SyncData =
         }
 
         SyncData(
-            event = EventEntity.Impl(
+            event = EventEntity(
                 title = "Awesome Conference",
                 description = "My awesome conference with logs of interesting sessions",
                 imageUrl = IMAGE_URL,
@@ -75,7 +75,7 @@ private fun session(
     companies: ObjectGenerator<CompanyEntity>,
     rooms: ObjectGenerator<RoomEntity>
 ): SessionEntity =
-    SessionEntity.Impl(
+    SessionEntity(
         id = getId(index),
         speakerId = speakers.generate { speaker(index = it, companies = companies) }.id,
         roomId = rooms.list.random().id,
@@ -88,7 +88,7 @@ private fun session(
     )
 
 private fun speaker(index: Int, companies: ObjectGenerator<CompanyEntity>): SpeakerEntity =
-    SpeakerEntity.Impl(
+    SpeakerEntity(
         id = getId(index),
         companyId = companies.generate(::company).id,
         name = sentence(wordRange = 2..3, capitalizeWords = true),
@@ -104,7 +104,7 @@ private fun speaker(index: Int, companies: ObjectGenerator<CompanyEntity>): Spea
     )
 
 private fun company(index: Int): CompanyEntity =
-    CompanyEntity.Impl(
+    CompanyEntity(
         id = getId(index),
         name = sentence(wordRange = 1..2, capitalizeWords = true),
         logoUrl = IMAGE_URL,
@@ -112,7 +112,7 @@ private fun company(index: Int): CompanyEntity =
     )
 
 private fun room(index: Int): RoomEntity =
-    RoomEntity.Impl(
+    RoomEntity(
         id = getId(index),
         name = word(capitalize = true)
     )

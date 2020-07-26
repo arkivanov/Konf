@@ -113,7 +113,7 @@ object Deps {
 
     object Squareup {
         object SqlDelight : Group(name = "com.squareup.sqldelight") {
-            private const val version = "1.3.0"
+            private const val version = "1.4.0"
 
             object GradlePlugin : Dependency(group = SqlDelight, name = "gradle-plugin", version = version)
             object AndroidDriver : Dependency(group = SqlDelight, name = "android-driver", version = version)
