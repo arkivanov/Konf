@@ -4,7 +4,6 @@ CREATE TABLE SpeakerEntity (
     companyId TEXT,
     name TEXT,
     avatarUrl TEXT,
-    imageUrl TEXT,
     job TEXT,
     location TEXT,
     biography TEXT,

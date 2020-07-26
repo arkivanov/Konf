@@ -93,7 +93,6 @@ private fun speaker(index: Int, companies: ObjectGenerator<CompanyEntity>): Spea
         companyId = companies.generate(::company).id,
         name = sentence(wordRange = 2..3, capitalizeWords = true),
         avatarUrl = IMAGE_URL.takeIf { Random.nextBoolean() },
-        imageUrl = IMAGE_URL,
         job = sentence(wordRange = 1..3, capitalizeWords = true),
         location = sentence(wordRange = 1..2, capitalizeWords = true),
         biography = sentences(sentenceRange = 1..5, wordRange = 3..8),

@@ -41,7 +41,6 @@ dependencies {
     implementation(project(":shared:sync"))
     implementation(project(":shared:session-list"))
     implementation(project(":shared:session-details"))
-    implementation(project(":shared:speaker-profile"))
 
     implementation(Deps.ArkIvanov.MviKotlin.MviKotlin)
     implementation(Deps.ArkIvanov.MviKotlin.MviKotlinMain)

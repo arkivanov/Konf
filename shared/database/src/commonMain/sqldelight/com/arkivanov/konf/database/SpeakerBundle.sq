@@ -4,7 +4,6 @@ SELECT
 Speaker.id AS speakerId,
 Speaker.name AS speakerName,
 Speaker.avatarUrl AS speakerAvatarUrl,
-Speaker.imageUrl AS speakerImageUrl,
 Speaker.job AS speakerJob,
 Speaker.location AS speakerLocation,
 Speaker.biography AS speakerBiography,
