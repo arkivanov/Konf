@@ -2,7 +2,7 @@ object Deps {
 
     object Jetbrains {
         object Kotlin : Group(name = "org.jetbrains.kotlin") {
-            private const val version = "1.3.72"
+            private const val version = "1.4.10"
 
             object Plugin {
                 object Gradle : Dependency(group = Kotlin, name = "kotlin-gradle-plugin", version = version)
@@ -38,18 +38,18 @@ object Deps {
     object Android {
         object Tools {
             object Build : Group(name = "com.android.tools.build") {
-                object Gradle : Dependency(group = Build, name = "gradle", version = "3.5.2")
+                object Gradle : Dependency(group = Build, name = "gradle", version = "4.0.0")
             }
         }
     }
 
     object AndroidX {
         object Core : Group(name = "androidx.core") {
-            object Ktx : Dependency(group = Core, name = "core-ktx", version = "1.1.0")
+            object Ktx : Dependency(group = Core, name = "core-ktx", version = "1.3.2")
         }
 
         object AppCompat : Group(name = "androidx.appcompat") {
-            object AppCompat : Dependency(group = AndroidX.AppCompat, name = "appcompat", version = "1.1.0")
+            object AppCompat : Dependency(group = AndroidX.AppCompat, name = "appcompat", version = "1.2.0")
         }
 
         object RecyclerView : Group(name = "androidx.recyclerview") {
@@ -57,15 +57,15 @@ object Deps {
         }
 
         object ConstraintLayout : Group(name = "androidx.constraintlayout") {
-            object ConstraintLayout : Dependency(group = AndroidX.ConstraintLayout, name = "constraintlayout", version = "1.1.3")
+            object ConstraintLayout : Dependency(group = AndroidX.ConstraintLayout, name = "constraintlayout", version = "2.0.0")
         }
 
         object DrawerLayout : Group(name = "androidx.drawerlayout") {
-            object DrawerLayout : Dependency(group = AndroidX.DrawerLayout, name = "drawerlayout", version = "1.0.0")
+            object DrawerLayout : Dependency(group = AndroidX.DrawerLayout, name = "drawerlayout", version = "1.1.1")
         }
 
         object SwipeRefreshLayout : Group(name = "androidx.swiperefreshlayout") {
-            object SwipeRefreshLayout : Dependency(group = AndroidX.SwipeRefreshLayout, name = "swiperefreshlayout", version = "1.0.0")
+            object SwipeRefreshLayout : Dependency(group = AndroidX.SwipeRefreshLayout, name = "swiperefreshlayout", version = "1.1.0")
         }
 
         object CardView : Group(name = "androidx.cardview") {
@@ -76,14 +76,14 @@ object Deps {
     object Google {
         object Android {
             object Material : Group(name = "com.google.android.material") {
-                object Material : Dependency(group = Android.Material, name = "material", version = "1.1.0")
+                object Material : Dependency(group = Android.Material, name = "material", version = "1.2.1")
             }
         }
     }
 
     object Badoo {
         object Reaktive : Group(name = "com.badoo.reaktive") {
-            private const val version = "1.1.16"
+            private const val version = "1.1.18"
 
             object Reaktive : Dependency(group = Badoo.Reaktive, name = "reaktive", version = version)
             object ReaktiveAnnotations : Dependency(group = Badoo.Reaktive, name = "reaktive-annotations", version = version)
@@ -98,7 +98,7 @@ object Deps {
 
     object ArkIvanov {
         object MviKotlin : Group(name = "com.arkivanov.mvikotlin") {
-            private const val version = "2.0.0-rc2"
+            private const val version = "2.0.0"
 
             object MviKotlin : Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin", version = version)
             object MviKotlinMain : Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin-main", version = version)
@@ -113,7 +113,7 @@ object Deps {
 
     object Squareup {
         object SqlDelight : Group(name = "com.squareup.sqldelight") {
-            private const val version = "1.4.0"
+            private const val version = "1.4.3"
 
             object GradlePlugin : Dependency(group = SqlDelight, name = "gradle-plugin", version = version)
             object AndroidDriver : Dependency(group = SqlDelight, name = "android-driver", version = version)
