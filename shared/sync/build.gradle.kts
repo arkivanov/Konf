@@ -14,19 +14,7 @@ kotlin {
                 implementation(Deps.Badoo.Reaktive.ReaktiveAnnotations)
                 implementation(Deps.ArkIvanov.MviKotlin.MviKotlin)
                 implementation(Deps.ArkIvanov.MviKotlin.MviKotlinExtensionsReaktive)
-                implementation(Deps.Jetbrains.Kotlinx.Serialization.RuntimeCommon)
-            }
-        }
-
-        androidMain {
-            dependencies {
-                implementation(Deps.Jetbrains.Kotlinx.Serialization.Runtime)
-            }
-        }
-
-        iosCommonMain {
-            dependencies {
-                implementation(Deps.Jetbrains.Kotlinx.Serialization.RuntimeNative)
+                implementation(Deps.Jetbrains.Kotlinx.Serialization.Json)
             }
         }
     }

@@ -5,7 +5,7 @@ import com.badoo.reaktive.maybe.maybeFromFunction
 import com.badoo.reaktive.maybe.subscribeOn
 import com.badoo.reaktive.scheduler.ioScheduler
 import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.json
+import kotlinx.serialization.json.buildJsonObject
 
 internal actual class SyncDataSourceImpl : SyncDataSource<JsonObject> {
 
@@ -13,7 +13,7 @@ internal actual class SyncDataSourceImpl : SyncDataSource<JsonObject> {
         maybeFromFunction {
             Thread.sleep(1000L)
 
-            json {} // Dummy JSON
+            buildJsonObject {}
         }
             .subscribeOn(ioScheduler)
 }

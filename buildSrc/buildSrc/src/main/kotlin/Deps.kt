@@ -26,11 +26,7 @@ object Deps {
 
         object Kotlinx : Group(name = "org.jetbrains.kotlinx") {
             object Serialization {
-                private const val version = "0.20.0"
-
-                object RuntimeCommon : Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime-common", version = version)
-                object Runtime : Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime", version = version)
-                object RuntimeNative : Dependency(group = Kotlinx, name = "kotlinx-serialization-runtime-native", version = version)
+                object Json : Dependency(group = Kotlinx, name = "kotlinx-serialization-json", version = "1.0.0-RC2")
             }
         }
     }
