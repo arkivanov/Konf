@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="decompose_view_tree_lifecycle" type="id" />
+    <item name="decompose_router_view_key" type="id" />
+</resources>

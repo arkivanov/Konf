@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="themeOverlayDark" format="reference" />
+    <attr name="textAppearanceCollapsingToolbarExpanded" format="reference" />
+    <attr name="icAvatarPlaceholder" format="reference" />
+    <attr name="icArrowBack" format="reference" />
+    <attr name="icTwitter" format="reference" />
+    <attr name="icGitHub" format="reference" />
+    <attr name="icFacebook" format="reference" />
+    <attr name="icLinkedIn" format="reference" />
+    <attr name="icMedium" format="reference" />
+</resources>

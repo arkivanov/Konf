@@ -1,24 +1,24 @@
 package com.arkivanov.konf.shared.sync.integration
 
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.lifecycle.doOnDestroy
+import com.arkivanov.decompose.value.Value
+import com.arkivanov.konf.shared.common.decompose.asValue
 import com.arkivanov.konf.shared.sync.SyncComponent
 import com.arkivanov.konf.shared.sync.SyncComponent.Dependencies
-import com.arkivanov.konf.shared.sync.SyncView
+import com.arkivanov.konf.shared.sync.SyncComponent.Events
+import com.arkivanov.konf.shared.sync.SyncComponent.Model
+import com.arkivanov.konf.shared.sync.SyncViewModel
 import com.arkivanov.konf.shared.sync.datasource.SyncDataSourceImpl
-import com.arkivanov.konf.shared.sync.integration.mappings.eventToIntent
 import com.arkivanov.konf.shared.sync.integration.mappings.jsonObjectToSyncData
 import com.arkivanov.konf.shared.sync.integration.mappings.stateToModel
 import com.arkivanov.konf.shared.sync.store.SyncStore
+import com.arkivanov.konf.shared.sync.store.SyncStore.Intent
 import com.arkivanov.konf.shared.sync.store.SyncStoreFactory
-import com.arkivanov.mvikotlin.core.binder.BinderLifecycleMode
-import com.arkivanov.mvikotlin.core.lifecycle.Lifecycle
-import com.arkivanov.mvikotlin.core.lifecycle.doOnDestroy
-import com.arkivanov.mvikotlin.extensions.reaktive.bind
-import com.arkivanov.mvikotlin.extensions.reaktive.events
-import com.arkivanov.mvikotlin.extensions.reaktive.states
-import com.badoo.reaktive.observable.map
-import com.badoo.reaktive.observable.mapNotNull
 
-internal class SyncComponentImpl(dependencies: Dependencies) : SyncComponent {
+internal class SyncComponentImpl(
+    dependencies: Dependencies
+) : SyncComponent, ComponentContext by dependencies.componentContext, Events {
 
     private val store: SyncStore =
         SyncStoreFactory(
@@ -29,16 +29,15 @@ internal class SyncComponentImpl(dependencies: Dependencies) : SyncComponent {
         ).create()
 
     init {
-        dependencies.lifecycle.doOnDestroy(store::dispose)
+        lifecycle.doOnDestroy(store::dispose)
     }
 
-    override fun onViewCreated(view: SyncView, viewLifecycle: Lifecycle) {
-        bind(viewLifecycle, BinderLifecycleMode.CREATE_DESTROY) {
-            view.events.mapNotNull(eventToIntent) bindTo store
+    override val model: Model =
+        object : Model, Events by this {
+            override val data: Value<SyncViewModel> = store.asValue(stateToModel)
         }
 
-        bind(viewLifecycle, BinderLifecycleMode.START_STOP) {
-            store.states.map(stateToModel) bindTo view
-        }
+    override fun onRefreshTriggered() {
+        store.accept(Intent.StartSync)
     }
 }

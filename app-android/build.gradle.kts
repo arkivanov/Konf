@@ -5,9 +5,9 @@ plugins {
     kotlin("android")
 }
 
-setupAndroidSdkVersions()
+setupAndroid()
 
-android {
+androidCompat {
     defaultConfig {
         applicationId = "com.arkivanov.konf.android"
         versionCode = 1
@@ -36,24 +36,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":shared:database"))
     implementation(project(":shared:common"))
-    implementation(project(":shared:sync"))
-    implementation(project(":shared:session-list"))
-    implementation(project(":shared:session-details"))
-
-    implementation(Deps.ArkIvanov.MviKotlin.MviKotlin)
-    implementation(Deps.ArkIvanov.MviKotlin.MviKotlinMain)
-    implementation(Deps.ArkIvanov.MviKotlin.MviKotlinExtensionsAndroidX)
+    implementation(project(":shared:database"))
+    implementation(project(":shared:root"))
+    implementation(Deps.ArkIvanov.Decompose.Decompose)
     implementation(Deps.Jetbrains.Kotlin.StdLib.Jdk7)
     implementation(Deps.AndroidX.AppCompat.AppCompat)
-    implementation(Deps.AndroidX.RecyclerView.RecyclerView)
-    implementation(Deps.AndroidX.ConstraintLayout.ConstraintLayout)
-    implementation(Deps.AndroidX.SwipeRefreshLayout.SwipeRefreshLayout)
-    implementation(Deps.AndroidX.CardView.CardView)
-    implementation(Deps.AndroidX.DrawerLayout.DrawerLayout)
-    implementation(Deps.AndroidX.Core.Ktx)
     implementation(Deps.Google.Android.Material.Material)
-    implementation(Deps.Squareup.SqlDelight.AndroidDriver)
-    implementation(Deps.Squareup.Picasso.Picasso)
 }

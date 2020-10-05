@@ -1,6 +1,6 @@
 setupMultiplatform()
 
-kotlin {
+kotlinCompat {
     sourceSets {
         commonMain {
             dependencies {
@@ -10,6 +10,16 @@ kotlin {
                 implementation(Deps.Badoo.Reaktive.ReaktiveAnnotations)
                 implementation(Deps.ArkIvanov.MviKotlin.MviKotlin)
                 implementation(Deps.ArkIvanov.MviKotlin.MviKotlinExtensionsReaktive)
+                implementation(Deps.ArkIvanov.Decompose.Decompose)
+            }
+        }
+
+        androidMain {
+            dependencies {
+                implementation(Deps.Google.Android.Material.Material)
+                implementation(Deps.AndroidX.ConstraintLayout.ConstraintLayout)
+                implementation(Deps.AndroidX.CoordinatorLayout.CoordinatorLayout)
+                implementation(Deps.AndroidX.Core.Ktx)
             }
         }
     }

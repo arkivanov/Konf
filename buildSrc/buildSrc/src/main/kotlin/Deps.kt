@@ -34,7 +34,7 @@ object Deps {
     object Android {
         object Tools {
             object Build : Group(name = "com.android.tools.build") {
-                object Gradle : Dependency(group = Build, name = "gradle", version = "4.0.0")
+                object Gradle : Dependency(group = Build, name = "gradle", version = "4.0.1")
             }
         }
     }
@@ -67,6 +67,14 @@ object Deps {
         object CardView : Group(name = "androidx.cardview") {
             object CardView : Dependency(group = AndroidX.CardView, name = "cardview", version = "1.0.0")
         }
+
+        object CoordinatorLayout : Group(name = "androidx.coordinatorlayout") {
+            object CoordinatorLayout : Dependency(group = AndroidX.CoordinatorLayout, name = "coordinatorlayout", version = "1.1.0")
+        }
+
+        object Transition : Group(name = "androidx.transition") {
+            object TransitionKtx : Dependency(group = Transition, name = "transition-ktx", version = "1.4.0-beta01")
+        }
     }
 
     object Google {
@@ -96,14 +104,16 @@ object Deps {
         object MviKotlin : Group(name = "com.arkivanov.mvikotlin") {
             private const val version = "2.0.0"
 
+            object Rx : Dependency(group = ArkIvanov.MviKotlin, name = "rx", version = version)
             object MviKotlin : Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin", version = version)
             object MviKotlinMain : Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin-main", version = version)
 
             object MviKotlinExtensionsReaktive :
                 Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin-extensions-reaktive", version = version)
+        }
 
-            object MviKotlinExtensionsAndroidX :
-                Dependency(group = ArkIvanov.MviKotlin, name = "mvikotlin-extensions-androidx", version = version)
+        object Decompose : Group(name = "com.arkivanov.decompose") {
+            object Decompose : Dependency(group = ArkIvanov.Decompose, name = "decompose", version = "0.0.8")
         }
     }
 

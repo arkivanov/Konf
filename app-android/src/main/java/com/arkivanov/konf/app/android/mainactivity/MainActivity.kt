@@ -1,70 +1,62 @@
 package com.arkivanov.konf.app.android.mainactivity
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentFactory
-import com.arkivanov.konf.app.android.root.RootFragment
-import com.arkivanov.konf.app.android.utils.app
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.decompose.backpressed.toBackPressedDispatched
+import com.arkivanov.decompose.instancekeeper.toInstanceKeeper
+import com.arkivanov.decompose.lifecycle.asDecomposeLifecycle
+import com.arkivanov.decompose.statekeeper.toStateKeeper
 import com.arkivanov.konf.app.android.utils.getLocaleCompat
-import com.arkivanov.konf.app.android.utils.transaction
-import com.arkivanov.konf.database.KonfDatabase
+import com.arkivanov.konf.database.DatabaseDriverFactory
 import com.arkivanov.konf.shared.common.dateformat.DateFormat
 import com.arkivanov.konf.shared.common.dateformat.DateFormatProviderImpl
+import com.arkivanov.konf.shared.common.resources.Resources
 import com.arkivanov.konf.shared.common.timeformat.TimeFormat
 import com.arkivanov.konf.shared.common.timeformat.TimeFormatProviderImpl
-import com.arkivanov.mvikotlin.core.store.StoreFactory
-import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
+import com.arkivanov.konf.shared.common.ui.DefaultViewContext
+import com.arkivanov.konf.shared.root.RootComponent
+import com.arkivanov.konf.shared.root.RootView
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val fragmentFactory = FragmentFactoryImpl()
-        supportFragmentManager.fragmentFactory = fragmentFactory
-
         super.onCreate(savedInstanceState)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.transaction {
-                add(android.R.id.content, fragmentFactory.rootFragment())
-            }
-        }
-    }
+        val lifecycle = lifecycle.asDecomposeLifecycle()
 
-    override fun onBackPressed() {
-        supportFragmentManager
-            .fragments
-            .forEach {
-                if ((it as? RootFragment)?.onBackPressed() == true) {
-                    return
-                }
-            }
+        val componentContext =
+            DefaultComponentContext(
+                lifecycle = lifecycle,
+                stateKeeper = savedStateRegistry.toStateKeeper(),
+                instanceKeeper = viewModelStore.toInstanceKeeper(),
+                backPressedDispatcher = onBackPressedDispatcher.toBackPressedDispatched(lifecycle)
+            )
 
-        super.onBackPressed()
-    }
-
-    private fun rootOutput(output: RootFragment.Output) {
-        when (output) {
-            is RootFragment.Output.Finished -> finish()
-        }
-    }
-
-    private inner class FragmentFactoryImpl : FragmentFactory() {
-        override fun instantiate(classLoader: ClassLoader, className: String): Fragment =
-            when (className) {
-                RootFragment::class.java.name -> rootFragment()
-                else -> super.instantiate(classLoader, className)
-            }
-
-        fun rootFragment(): RootFragment =
-            RootFragment(
-                object : RootFragment.Dependencies {
-                    override val storeFactory: StoreFactory get() = DefaultStoreFactory
-                    override val database: KonfDatabase get() = app.database
-                    override val dateFormatProvider: DateFormat.Provider = DateFormatProviderImpl(resources.configuration.getLocaleCompat())
-                    override val timeFormatProvider: TimeFormat.Provider = TimeFormatProviderImpl(resources.configuration.getLocaleCompat())
-                    override val rootOutput: (RootFragment.Output) -> Unit = ::rootOutput
+        val root =
+            RootComponent(
+                object : RootComponent.Dependencies {
+                    override val componentContext: ComponentContext = componentContext
+                    override val databaseDriverFactory: DatabaseDriverFactory = DatabaseDriverFactory(this@MainActivity)
+                    override val dateFormatProvider: DateFormat.Provider =
+                        DateFormatProviderImpl(this@MainActivity.resources.configuration.getLocaleCompat())
+                    override val timeFormatProvider: TimeFormat.Provider =
+                        TimeFormatProviderImpl(this@MainActivity.resources.configuration.getLocaleCompat())
+                    override val resources: Resources = ResourcesImpl(this@MainActivity)
+                    override val rootOutput: (RootComponent.Output) -> Unit = ::onRootOutput
                 }
             )
+
+        DefaultViewContext(parent = findViewById(android.R.id.content), lifecycle = lifecycle).apply {
+            parent.addView(RootView(root.model))
+        }
     }
+
+    private fun onRootOutput(output: RootComponent.Output): Unit =
+        when (output) {
+            is RootComponent.Output.SocialAccountSelected -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(output.url)))
+        }
 }

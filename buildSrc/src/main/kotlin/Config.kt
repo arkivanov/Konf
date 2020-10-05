@@ -1,8 +1,11 @@
 import co.touchlab.kotlinxcodesync.SyncExtension
 import com.android.build.gradle.BaseExtension
+import org.gradle.api.JavaVersion
 import org.gradle.api.NamedDomainObjectContainer
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.withGroovyBuilder
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
@@ -10,9 +13,9 @@ fun Project.setupMultiplatform() {
     plugins.apply("kotlin-multiplatform")
     plugins.apply("com.android.library")
 
-    setupAndroidSdkVersions()
+    setupAndroid()
 
-    kotlin {
+    kotlinCompat {
         android {
             publishLibraryVariants("release", "debug")
         }
@@ -62,22 +65,31 @@ fun Project.setupMultiplatform() {
     }
 }
 
-fun Project.setupAndroidSdkVersions() {
-    android {
+fun Project.setupAndroid() {
+    androidCompat {
         compileSdkVersion(29)
 
         defaultConfig {
             targetSdkVersion(29)
-            minSdkVersion(21)
+            minSdkVersion(23)
         }
+
+        compileOptions {
+            sourceCompatibility = JavaVersion.VERSION_1_8
+            targetCompatibility = JavaVersion.VERSION_1_8
+        }
+    }
+
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+        kotlinOptions.jvmTarget = "1.8"
     }
 }
 
-fun Project.android(block: BaseExtension.() -> Unit) {
+fun Project.androidCompat(block: BaseExtension.() -> Unit) {
     extensions.getByType<BaseExtension>().block()
 }
 
-fun Project.kotlin(block: KotlinMultiplatformExtension.() -> Unit) {
+fun Project.kotlinCompat(block: KotlinMultiplatformExtension.() -> Unit) {
     extensions.getByType<KotlinMultiplatformExtension>().block()
 }
 
