@@ -113,7 +113,10 @@ object Deps {
         }
 
         object Decompose : Group(name = "com.arkivanov.decompose") {
-            object Decompose : Dependency(group = ArkIvanov.Decompose, name = "decompose", version = "0.0.8")
+            private const val version = "0.1.0"
+
+            object Decompose : Dependency(group = ArkIvanov.Decompose, name = "decompose", version = version)
+            object ExtensionsAndroid : Dependency(group = ArkIvanov.Decompose, name = "extensions-android", version = version)
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.decompose.backpressed.toBackPressedDispatched
+import com.arkivanov.decompose.extensions.android.DefaultViewContext
 import com.arkivanov.decompose.instancekeeper.toInstanceKeeper
 import com.arkivanov.decompose.lifecycle.asDecomposeLifecycle
 import com.arkivanov.decompose.statekeeper.toStateKeeper
@@ -17,7 +18,6 @@ import com.arkivanov.konf.shared.common.dateformat.DateFormatProviderImpl
 import com.arkivanov.konf.shared.common.resources.Resources
 import com.arkivanov.konf.shared.common.timeformat.TimeFormat
 import com.arkivanov.konf.shared.common.timeformat.TimeFormatProviderImpl
-import com.arkivanov.konf.shared.common.ui.DefaultViewContext
 import com.arkivanov.konf.shared.root.RootComponent
 import com.arkivanov.konf.shared.root.RootView
 

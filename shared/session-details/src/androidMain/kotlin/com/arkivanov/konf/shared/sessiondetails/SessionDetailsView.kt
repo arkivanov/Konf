@@ -5,10 +5,10 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
+import com.arkivanov.decompose.extensions.android.ViewContext
+import com.arkivanov.decompose.extensions.android.layoutInflater
 import com.arkivanov.konf.shared.common.decompose.diff
-import com.arkivanov.konf.shared.common.ui.ViewContext
 import com.arkivanov.konf.shared.common.ui.clipToCircle
-import com.arkivanov.konf.shared.common.ui.inflate
 import com.arkivanov.konf.shared.common.ui.loadImage
 import com.arkivanov.konf.shared.common.ui.requireNotNull
 import com.arkivanov.konf.shared.common.ui.requireViewWithId
@@ -19,7 +19,7 @@ import com.arkivanov.konf.shared.sessiondetails.SessionDetailsViewModel as ViewM
 
 @Suppress("FunctionName") // Factory function
 fun ViewContext.SessionDetailsView(model: Model): View {
-    val root = inflate(R.layout.session_details)
+    val root = layoutInflater.inflate(R.layout.session_details, parent, false)
 
     val toolbar = root.requireViewWithId<MaterialToolbar>(R.id.toolbar)
     val imageView = root.requireViewWithId<ImageView>(R.id.image)

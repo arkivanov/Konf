@@ -12,6 +12,7 @@ kotlinCompat {
 
         androidMain {
             dependencies {
+                implementation(Deps.ArkIvanov.Decompose.ExtensionsAndroid)
                 implementation(Deps.AndroidX.AppCompat.AppCompat)
                 implementation(Deps.AndroidX.RecyclerView.RecyclerView)
                 implementation(Deps.Squareup.Picasso.Picasso)

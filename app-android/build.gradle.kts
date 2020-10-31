@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":shared:database"))
     implementation(project(":shared:root"))
     implementation(Deps.ArkIvanov.Decompose.Decompose)
+    implementation(Deps.ArkIvanov.Decompose.ExtensionsAndroid)
     implementation(Deps.Jetbrains.Kotlin.StdLib.Jdk7)
     implementation(Deps.AndroidX.AppCompat.AppCompat)
     implementation(Deps.Google.Android.Material.Material)

@@ -16,6 +16,7 @@ kotlinCompat {
 
         androidMain {
             dependencies {
+                implementation(Deps.ArkIvanov.Decompose.ExtensionsAndroid)
                 implementation(Deps.Google.Android.Material.Material)
                 implementation(Deps.AndroidX.ConstraintLayout.ConstraintLayout)
                 implementation(Deps.AndroidX.CoordinatorLayout.CoordinatorLayout)

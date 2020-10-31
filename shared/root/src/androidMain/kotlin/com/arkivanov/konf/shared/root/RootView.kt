@@ -10,17 +10,17 @@ import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
 import androidx.transition.Visibility
 import androidx.transition.doOnEnd
+import com.arkivanov.decompose.extensions.android.ViewContext
+import com.arkivanov.decompose.extensions.android.layoutInflater
 import com.arkivanov.konf.shared.common.decompose.children
-import com.arkivanov.konf.shared.common.ui.ViewContext
 import com.arkivanov.konf.shared.common.ui.addTo
-import com.arkivanov.konf.shared.common.ui.inflate
 import com.arkivanov.konf.shared.root.RootComponent.Model
 import com.arkivanov.konf.shared.sessiondetails.SessionDetailsView
 import com.arkivanov.konf.shared.sessionlist.SessionListView
 
 @Suppress("FunctionName") // Factory function
 fun ViewContext.RootView(model: Model): View {
-    val root = inflate(R.layout.root_container)
+    val root = layoutInflater.inflate(R.layout.root_container, parent, false)
 
     root.children(model.routerState, R.id.router_view, lifecycle) { parent, child, _ ->
         val oldChildView: View? = parent.getChildAt(0)

@@ -20,6 +20,7 @@ kotlinCompat {
 
         androidMain {
             dependencies {
+                implementation(Deps.ArkIvanov.Decompose.ExtensionsAndroid)
                 implementation(Deps.AndroidX.Transition.TransitionKtx)
             }
         }
