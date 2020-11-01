@@ -36,15 +36,15 @@ class MainActivity : AppCompatActivity() {
                 backPressedDispatcher = onBackPressedDispatcher.toBackPressedDispatched(lifecycle)
             )
 
+        val locale = resources.configuration.getLocaleCompat()
+
         val root =
             RootComponent(
                 object : RootComponent.Dependencies {
                     override val componentContext: ComponentContext = componentContext
                     override val databaseDriverFactory: DatabaseDriverFactory = DatabaseDriverFactory(this@MainActivity)
-                    override val dateFormatProvider: DateFormat.Provider =
-                        DateFormatProviderImpl(this@MainActivity.resources.configuration.getLocaleCompat())
-                    override val timeFormatProvider: TimeFormat.Provider =
-                        TimeFormatProviderImpl(this@MainActivity.resources.configuration.getLocaleCompat())
+                    override val dateFormatProvider: DateFormat.Provider = DateFormatProviderImpl(locale)
+                    override val timeFormatProvider: TimeFormat.Provider = TimeFormatProviderImpl(locale)
                     override val resources: Resources = ResourcesImpl(this@MainActivity)
                     override val rootOutput: (RootComponent.Output) -> Unit = ::onRootOutput
                 }
